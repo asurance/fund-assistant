@@ -1,0 +1,45 @@
+{
+  "name": "fund-assistant",
+  "version": "1.0.0",
+  "description": "基金小助手",
+  "private": true,
+  "scripts": {
+    "debug": "ts-node src/debug.ts",
+    "start": "ts-node src/index.ts",
+    "dev": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.json\" webpack serve --progress --config webpack/webpack.config.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asurance/fund-assistant.git"
+  },
+  "bugs": {
+    "url": "https://github.com/asurance/fund-assistant/issues"
+  },
+  "homepage": "https://github.com/asurance/fund-assistant#readme",
+  "dependencies": {
+    "@types/html-webpack-plugin": "^3.2.5",
+    "@types/node": "^14.14.37",
+    "@types/nodemailer": "^6.4.1",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/styled-components": "^5.1.9",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.23.0",
+    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "html-webpack-plugin": "^5.3.1",
+    "nodemailer": "^6.5.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "5.2.1",
+    "ts-loader": "^8.1.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3",
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
