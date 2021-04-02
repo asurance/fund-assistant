@@ -5,6 +5,7 @@ import { GetMailContent, SendEmail } from './emailUtil'
 
 async function Main() {
     const data = await FetchData()
+    console.log(`抓取到:${data}`)
     const ttm = parseFloat(data.split(':')[1])
     // await SaveData(ttm)
     if (isNaN(ttm)) {

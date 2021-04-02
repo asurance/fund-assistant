@@ -1,0 +1,32 @@
+on:
+  schedule:
+    - cron: '30 14 * * 1-5'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install
+        run: yarn
+        if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: Report
+        run: yarn 
+
+      - name: Deploy
+        run: npm run start
+        env:
+          USER_EMAIL: ${{secrets.USER_EMAIL}}
+          USER_PASS: ${{secrets.USER_PASS}}
+          FROM_EMAIL: ${{secrets.USER_EMAIL}}
+          TO_EMAIL: ${{secrets.USER_EMAIL}}
