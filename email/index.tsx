@@ -1,6 +1,10 @@
 import React, { FC } from 'react'
 import Strong from '../components/Strong'
 
-const App: FC<unknown> = () => (<Strong>Hello world!</Strong>)
+type Props = {
+    ttm: number
+}
+
+const App: FC<Props> = ({ ttm }: Props) => (<Strong>{`当前ttm值为:${ttm}`}</Strong>)
 
 export default App

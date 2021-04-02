@@ -1,34 +1,19 @@
-import { createTransport } from 'nodemailer'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { createElement } from 'react'
-import { ServerStyleSheet } from 'styled-components'
 import App from '../email'
+import { FetchData } from './data'
+import { GetMailContent, SendEmail } from './emailUtil'
 
-const sheet = new ServerStyleSheet()
-
-const content = renderToStaticMarkup(sheet.collectStyles(createElement(App)))
-
-const html = `${sheet.getStyleTags()}${content}`
-
-const transporter = createTransport({
-    service: 'QQ',
-    port: 465,
-    auth: {
-        user: process.env.USER_EMAIL,
-        pass: process.env.USER_PASS,
+async function Main() {
+    const data = await FetchData()
+    const ttm = parseFloat(data.split(':')[1])
+    // await SaveData(ttm)
+    if (isNaN(ttm)) {
+        await SendEmail('基金日报', `获取ttm失败,实际获取内容:${data}`)
+    } else {
+        if (ttm > 50) {
+            await SendEmail('基金日报', GetMailContent(createElement(App, { ttm })))
+        }
     }
-})
-
-const mailOptions = {
-    from: process.env.FROM_EMAIL,
-    to: process.env.TO_EMAIL,
-    subject: 'Hello',
-    html,
 }
 
-transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-        return console.log(error)
-    }
-    console.log('Message sent: %s', info.messageId)
-})
+Main()
