@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '30 14 * * 1-5'
+    - cron: '30 6 * * 1-5'
 
 jobs:
   deploy:
@@ -23,8 +23,8 @@ jobs:
       - name: Report
         run: yarn 
 
-      - name: Deploy
-        run: npm run start
+      - name: Report
+        run: yarn run start
         env:
           USER_EMAIL: ${{secrets.USER_EMAIL}}
           USER_PASS: ${{secrets.USER_PASS}}
