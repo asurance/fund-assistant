@@ -3,7 +3,7 @@ on:
     - cron: '30 6 * * 1-5'
 
 jobs:
-  deploy:
+  report_fund:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,9 +19,6 @@ jobs:
       - name: Install
         run: yarn
         if: steps.cache.outputs.cache-hit != 'true'
-
-      - name: Report
-        run: yarn 
 
       - name: Report
         run: yarn run start
