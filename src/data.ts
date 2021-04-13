@@ -9,7 +9,7 @@ const jsonPath = resolve(__dirname, '../data.json')
 export async function FetchData(): Promise<string> {
     const browser = await launch()
     const page = await browser.newPage()
-    await page.goto('https://www.legulegu.com/stockdata/a-ttm-lyr')
+    page.goto('https://www.legulegu.com/stockdata/a-ttm-lyr')
     await page.waitForSelector(selector)
     const target = await page.$eval(selector, (element) => {
         return element.textContent ?? ''
