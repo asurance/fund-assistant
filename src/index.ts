@@ -13,6 +13,8 @@ async function Main() {
     } else {
         if (ttm > 50) {
             await SendEmail('基金日报', GetMailContent(createElement(App, { ttm })))
+        } else if (ttm <= 40) {
+            await SendEmail('基金日报', GetMailContent(createElement(App, { ttm })))
         }
     }
 }
