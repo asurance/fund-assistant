@@ -1,4 +1,4 @@
-import { writeFile } from 'fs'
+import { writeFile, readFile } from 'fs'
 import { resolve } from 'path'
 import { launch } from 'puppeteer'
 
@@ -22,11 +22,29 @@ export async function FetchData(): Promise<string> {
 
 export function SaveData(ttm: number): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        writeFile(jsonPath, JSON.stringify({ ttm }), (err) => {
+        writeFile(jsonPath, JSON.stringify({ ttm }), 'utf-8', (err) => {
             if (err) {
                 reject(err)
             } else {
                 resolve()
+            }
+        })
+    })
+}
+
+export function GetData(): Promise<number | null> {
+    return new Promise<number | null>((resolve) => {
+        readFile(jsonPath, 'utf-8', (err, data) => {
+            if (err) {
+                resolve(null)
+            } else {
+                try {
+                    const ttf = (JSON.parse(data) as { ttf: number }).ttf
+                    resolve(ttf)
+                }
+                catch {
+                    resolve(null)
+                }
             }
         })
     })

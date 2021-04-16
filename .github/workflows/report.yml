@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '30 6 * * 1-5'
+    - cron: "30 6 * * 1-5"
 
 jobs:
   report_fund:
@@ -19,6 +19,13 @@ jobs:
       - name: Install
         run: yarn
         if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: CacheData
+        uses: actions/cache@v2
+        id: data
+        with:
+          path: data.json
+          key: ${{ runner.os }}-data-v1
 
       - name: Report
         run: yarn run start
