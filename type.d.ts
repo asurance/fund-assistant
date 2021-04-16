@@ -1,3 +1,3 @@
 declare module '*.json' {
-    export const ttm: number
+  export const ttm: number
 }
