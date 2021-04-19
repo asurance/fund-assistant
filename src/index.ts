@@ -1,35 +1,56 @@
 import { createElement } from 'react'
-import App from '../email'
-import { TTMType } from '../interfaces/ttm'
-import { FetchData, GetData, SaveData } from './data'
-import { GetMailContent, SendEmail } from './emailUtil'
+import App from './email'
+import { TTMType } from './interfaces/ttm'
+import { FetchData, cache, SendEmail, dingdingRobot } from './utils/util'
 
 async function Main() {
-  const [data, pre] = await Promise.all([FetchData(), GetData()])
-  console.log(`抓取到:${data}`)
-  if (pre === null) {
-    console.log('没有获取到缓存数据')
-  } else {
-    console.log(`获取到缓存数据 ttf: ${pre}`)
-  }
-  const ttm = parseFloat(data.split(':')[1])
-  const lastTtm = pre ?? ttm
-  if (isNaN(ttm)) {
-    await SendEmail('基金日报', `获取ttm失败,实际获取内容:${data}`)
-  } else {
-    await SaveData(ttm)
-    if (ttm > 50 && lastTtm <= 50) {
-      await SendEmail(
-        '基金日报',
-        GetMailContent(createElement(App, { ttm, type: TTMType.high })),
-      )
-    } else if (ttm <= 40 && lastTtm > 40) {
-      await SendEmail(
-        '基金日报',
-        GetMailContent(createElement(App, { ttm, type: TTMType.low })),
-      )
+  const ttmPromise = FetchData().then((data) => {
+    console.log(`获取到数据: ${data}`)
+    const ttm = parseFloat(data.split(':')[1])
+    return isNaN(ttm) ? null : ttm
+  })
+  const cachePromise = cache.getCache().then((data) => {
+    if (data === null) {
+      console.log('没有获取到缓存数据')
+    } else {
+      console.log(`获取到缓存数据: ${data.ttm}`)
     }
-  }
+    return data
+  })
+  const emailPromise = Promise.all([ttmPromise, cachePromise]).then(
+    ([ttm, cacheData]) => {
+      if (ttm === null) return
+      if (cacheData === null) {
+        if (ttm > 50) {
+          return SendEmail(
+            '基金日报',
+            createElement(App, { ttm, type: TTMType.high }),
+          )
+        } else if (ttm <= 40) {
+          return SendEmail(
+            '基金日报',
+            createElement(App, { ttm, type: TTMType.low }),
+          )
+        }
+      } else {
+        if (ttm > 50 && cacheData.ttm <= 50) {
+          return SendEmail(
+            '基金日报',
+            createElement(App, { ttm, type: TTMType.high }),
+          )
+        } else if (ttm <= 40 && cacheData.ttm > 40) {
+          return SendEmail(
+            '基金日报',
+            createElement(App, { ttm, type: TTMType.low }),
+          )
+        }
+      }
+    },
+  )
+  const dingDingPromise = ttmPromise.then((ttm) => {
+    dingdingRobot.sendText(`小助手: 获取ttm${ttm}`)
+  })
+  await Promise.all([emailPromise, dingDingPromise])
 }
 
 Main()

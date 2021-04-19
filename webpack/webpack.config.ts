@@ -6,7 +6,7 @@ const config = {
   mode: 'development',
   devtool: 'source-map',
   entry: {
-    index: resolve(__dirname, '../mock/index.tsx'),
+    index: resolve(__dirname, '../src/mock/index.tsx'),
   },
   module: {
     rules: [
@@ -27,7 +27,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: resolve(__dirname, '../mock/index.html'),
+      template: resolve(__dirname, '../src/mock/index.html'),
     }),
   ],
   resolve: {
