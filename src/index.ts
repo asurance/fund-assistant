@@ -48,9 +48,13 @@ async function Main() {
     },
   )
   const dingDingPromise = ttmPromise.then((ttm) => {
-    dingdingRobot.sendText(`小助手: 获取ttm${ttm}`)
+    return dingdingRobot.sendText(`小助手: 获取ttm${ttm}`)
   })
-  await Promise.all([emailPromise, dingDingPromise])
+  const saveDataPromise = ttmPromise.then((ttm) => {
+    if (ttm === null) return Promise.resolve()
+    return cache.setCache({ ttm })
+  })
+  await Promise.all([emailPromise, dingDingPromise, saveDataPromise])
 }
 
 Main()
