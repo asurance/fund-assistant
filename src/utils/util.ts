@@ -1,41 +1,28 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { SentMessageInfo } from 'nodemailer'
-import { resolve } from 'path'
-import { launch } from 'puppeteer'
 import { ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ServerStyleSheet } from 'styled-components'
-import { useCache } from './uses/useCache'
+import { TTMData } from '../interfaces/ttm'
 import { useDingDingRobot } from './uses/useDingDingRobot'
 import { useEmail } from './uses/useEmail'
+import { hex } from 'js-md5'
+import axios from 'axios'
 
-const selector =
-  'body > div.lg-main > div.container.lg-container.lg-container-ad > div > div.col-md-12 > div.stock-data-center > div.data-view > div.market > div > div > div.col-md-4.market-title-data-for-index > div:nth-child(2)'
+function GetToken(): string {
+  const date = new Date()
+  return hex(
+    [
+      date.getFullYear(),
+      `00${date.getMonth() + 1}`.slice(-2),
+      `00${date.getDate()}`.slice(-2),
+    ].join('-'),
+  )
+}
 
-const jsonPath = resolve(__dirname, '../../data.json')
-
-export const cache = useCache<{ ttm: number }>(jsonPath)
+export const token = GetToken()
 
 export const dingdingRobot = useDingDingRobot(process.env.DING_DING_TOKEN!)
-
-export async function FetchData(): Promise<string> {
-  const browser = await launch()
-  const page = await browser.newPage()
-  page.goto('https://www.legulegu.com/stockdata/a-ttm-lyr').catch((e) => {
-    if (e instanceof Error) {
-      console.log(`${e.name}: ${e.message}`)
-    } else {
-      console.log(e)
-    }
-  })
-  await page.waitForSelector(selector)
-  const target = await page.$eval(selector, (element) => {
-    return element.textContent ?? ''
-  })
-  await page.close()
-  await browser.close()
-  return target
-}
 
 const email = useEmail({
   service: 'QQ',
@@ -58,4 +45,21 @@ export function SendEmail(
     subject,
     html: `${sheet.getStyleTags()}${divContent}`,
   })
+}
+
+export async function GetTTMData(): Promise<TTMData[]> {
+  const data = await axios(
+    `https://www.legulegu.com/api/stockdata/market-ttm-lyr/get-data?token=${token}&marketId=5`,
+  )
+  return data.data
+}
+
+const ttmLevel = [40, 50, 55, 60]
+
+export function GetTTMLevel(ttm: number): number {
+  let level = 0
+  while (level < ttmLevel.length && ttm < ttmLevel[level]) {
+    level++
+  }
+  return level
 }

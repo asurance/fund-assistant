@@ -3,7 +3,21 @@ import axios from 'axios'
 export function useDingDingRobot(
   token: string,
 ): {
-  sendText: (text: string) => Promise<unknown>
+  sendText: (
+    text: string,
+    at?: { atMobiles?: string[]; atUserIds?: string[]; isAtAll?: boolean },
+  ) => Promise<void>
+  sendMarkdown: (
+    title: string,
+    text: string,
+    at?: { atMobiles?: string[]; atUserIds?: string[]; isAtAll?: boolean },
+  ) => Promise<void>
+  sendLink: (
+    title: string,
+    text: string,
+    messageUrl: string,
+    picUrl?: string,
+  ) => Promise<void>
 } {
   return {
     sendText: (
@@ -15,7 +29,35 @@ export function useDingDingRobot(
         text: {
           content: text,
         },
-        at: at,
+        at,
+      }),
+    sendMarkdown: (
+      title: string,
+      text: string,
+      at?: { atMobiles?: string[]; atUserIds?: string[]; isAtAll?: boolean },
+    ) =>
+      axios.post(`https://oapi.dingtalk.com/robot/send?access_token=${token}`, {
+        msgtype: 'markdown',
+        markdown: {
+          title,
+          text,
+          at,
+        },
+      }),
+    sendLink: (
+      title: string,
+      text: string,
+      messageUrl: string,
+      picUrl?: string,
+    ) =>
+      axios.post(`https://oapi.dingtalk.com/robot/send?access_token=${token}`, {
+        msgtype: 'link',
+        link: {
+          title,
+          text,
+          messageUrl,
+          picUrl,
+        },
       }),
   }
 }

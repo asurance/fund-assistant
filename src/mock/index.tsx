@@ -1,10 +1,6 @@
 import { render } from 'react-dom'
 import React from 'react'
 import App from '../email'
-import { ttm } from '../data.json'
-import { TTMType } from '../interfaces/ttm'
+import data from '../../data.json'
 
-render(
-  <App ttm={ttm} type={TTMType.high} />,
-  document.getElementById('container'),
-)
+render(<App data={data} />, document.getElementById('container'))
