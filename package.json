@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "debug": "ts-node src/debug.ts",
-    "start": "ts-node src/index.ts || true",
+    "report": "node dist/index.js || true",
+    "build": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.json\" webpack --config webpack/webpack.config.report.ts",
     "dev": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.json\" webpack serve --progress --config webpack/webpack.config.ts"
   },
   "repository": {
