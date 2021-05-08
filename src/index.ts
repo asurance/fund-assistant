@@ -1,27 +1,56 @@
 import { createElement } from 'react'
 import App from './email'
-import { SendEmail, dingdingRobot, GetTTMData, GetTTMLevel } from './utils/util'
+import {
+  SendEmail,
+  dingdingRobot,
+  GetTTMData,
+  GetTTMLevel,
+  FetchData,
+} from './utils/util'
 
 async function Main() {
+  const fundPromise = FetchData()
   const ttmPromise = GetTTMData()
-  const emailPromise = ttmPromise.then((ttm) =>
-    SendEmail('基金日报', createElement(App, { data: ttm })),
+  const emailPromise = Promise.all([
+    ttmPromise,
+    fundPromise,
+  ]).then(([ttm, fund]) =>
+    SendEmail('基金日报', createElement(App, { data: ttm, fund })),
   )
-  const dingDingPromise = ttmPromise.then((ttm) => {
-    if (ttm.length >= 2) {
-      const pre = ttm[ttm.length - 2]
-      const now = ttm[ttm.length - 1]
-      const preLevel = GetTTMLevel(pre.averagePETTM)
-      const nowLevel = GetTTMLevel(now.averagePETTM)
-      if (nowLevel !== preLevel) {
-        return dingdingRobot.sendLink(
-          '小助手: 动态市盈率',
-          `ttm level变动${nowLevel - preLevel}`,
-          'https://mail.qq.com/',
-        )
+  const dingDingPromise = Promise.all([ttmPromise, fundPromise]).then(
+    ([ttm, fund]) => {
+      const logs: string[] = []
+      if (ttm.length >= 2) {
+        const pre = ttm[ttm.length - 2]
+        const now = ttm[ttm.length - 1]
+        const preLevel = GetTTMLevel(pre.averagePETTM)
+        const nowLevel = GetTTMLevel(now.averagePETTM)
+        if (nowLevel !== preLevel) {
+          logs.push(`* ttm level 变动:${nowLevel - preLevel}`)
+        }
       }
-    }
-  })
+      {
+        let sum = 0
+        for (const f of fund) {
+          if (isNaN(f)) {
+            logs.push('* 数据异常')
+            break
+          }
+          if (f > 0) {
+            break
+          }
+          sum += f
+          if (sum < -4) {
+            logs.push('* 估值下降累计已超过4%')
+            break
+          }
+        }
+      }
+      if (logs.length > 0) {
+        return dingdingRobot.sendMarkdown('小助手', logs.join('\n'))
+      }
+    },
+  )
   await Promise.all([emailPromise, dingDingPromise])
 }
 

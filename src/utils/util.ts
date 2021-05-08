@@ -8,6 +8,10 @@ import { useDingDingRobot } from './uses/useDingDingRobot'
 import { useEmail } from './uses/useEmail'
 import { hex } from 'js-md5'
 import axios from 'axios'
+import { launch } from 'puppeteer'
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const Empty = (): void => {}
 
 function GetToken(): string {
   const date = new Date()
@@ -62,4 +66,19 @@ export function GetTTMLevel(ttm: number): number {
     level++
   }
   return level
+}
+
+const selector = '#jztable > table > tbody > tr > td:nth-child(4)'
+
+export async function FetchData(): Promise<number[]> {
+  const browser = await launch()
+  const page = await browser.newPage()
+  page.goto('http://fundf10.eastmoney.com/jjjz_002199.html').catch(Empty)
+  await page.waitForSelector(selector)
+  const targets = await page.$$eval(selector, (elements) =>
+    elements.map((element) => parseFloat(element.textContent!)),
+  )
+  await page.close()
+  await browser.close()
+  return targets
 }
