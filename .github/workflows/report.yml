@@ -30,7 +30,7 @@ jobs:
 
       - name: BuildScript
         run: yarn run build
-        if: steps.cachce-script.outputs.cache-hit != 'true'
+        if: steps.cache-script.outputs.cache-hit != 'true'
 
       - name: Report
         run: yarn run report
