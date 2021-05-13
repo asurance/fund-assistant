@@ -68,17 +68,31 @@ export function GetTTMLevel(ttm: number): number {
   return level
 }
 
-const selector = '#jztable > table > tbody > tr > td:nth-child(4)'
+const historySelector = '#jztable > table > tbody > tr > td:nth-child(4)'
+const predictSelector = '#fund_gszf'
 
 export async function FetchData(): Promise<number[]> {
   const browser = await launch()
   const page = await browser.newPage()
-  page.goto('http://fundf10.eastmoney.com/jjjz_002199.html').catch(Empty)
-  await page.waitForSelector(selector)
-  const targets = await page.$$eval(selector, (elements) =>
-    elements.map((element) => parseFloat(element.textContent!)),
+  const navigationPromise = page.goto(
+    'http://fundf10.eastmoney.com/jjjz_002199.html',
   )
+  const historyPromise = page.waitForSelector(historySelector).then(() => {
+    return page.$$eval(historySelector, (elements) =>
+      elements.map((element) => parseFloat(element.textContent!)),
+    )
+  })
+  const predictPromise = page.waitForSelector(predictSelector).then(() => {
+    return page.$eval(predictSelector, (element) =>
+      parseFloat(element.textContent!),
+    )
+  })
+  const [, history, predict] = await Promise.all([
+    navigationPromise,
+    historyPromise,
+    predictPromise,
+  ])
   await page.close()
   await browser.close()
-  return targets
+  return [predict, ...history]
 }
