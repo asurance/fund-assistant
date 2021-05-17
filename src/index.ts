@@ -42,6 +42,7 @@ async function Main() {
             break
           } else if (sum > 4) {
             logs.push('* 估值上升累计已超过4%')
+            break
           }
         }
       }
