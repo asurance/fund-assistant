@@ -33,16 +33,15 @@ async function Main() {
         let sum = 0
         for (const f of fund) {
           if (isNaN(f)) {
-            logs.push('* 数据异常')
-            break
-          }
-          if (f > 0) {
+            logs.push(`* 数据异常,当前累计:${sum}`)
             break
           }
           sum += f
-          if (sum < -4) {
+          if (sum <= -4) {
             logs.push('* 估值下降累计已超过4%')
             break
+          } else if (sum > 4) {
+            logs.push('* 估值上升累计已超过4%')
           }
         }
       }

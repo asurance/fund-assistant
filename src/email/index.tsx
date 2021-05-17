@@ -42,21 +42,17 @@ function GetTTMContainer(data: TTMData[]) {
 }
 
 function GetFundContainer(fund: number[]) {
-  let index = fund.findIndex((f) => isNaN(f) || f > 0)
-  if (index >= 0 && isNaN(fund[index])) {
-    return <CenterDiv>数据异常</CenterDiv>
-  }
-  if (index === 0) {
-    return <CenterDiv>当前上涨中</CenterDiv>
-  }
-  if (index < 0) {
-    index = fund.length
-  }
   let sum = 0
-  for (let i = 0; i < index; i++) {
-    sum += fund[i]
+  for (const f of fund) {
+    if (isNaN(f)) {
+      return <CenterDiv>数据异常</CenterDiv>
+    }
+    if (sum * f < 0) {
+      sum = 0
+    }
+    sum += f
   }
-  return <CenterDiv>{`当前下跌幅度累计${sum}%`}</CenterDiv>
+  return <CenterDiv>{`当前估值连续变化幅度累计${sum}%`}</CenterDiv>
 }
 
 const App: FC<Props> = ({ data, fund }: Props) => {

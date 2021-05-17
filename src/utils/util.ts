@@ -74,9 +74,9 @@ const predictSelector = '#fund_gszf'
 export async function FetchData(): Promise<number[]> {
   const browser = await launch()
   const page = await browser.newPage()
-  const navigationPromise = page.goto(
-    'http://fundf10.eastmoney.com/jjjz_002199.html',
-  )
+  const navigationPromise = page
+    .goto('http://fundf10.eastmoney.com/jjjz_002199.html')
+    .catch(console.log)
   const historyPromise = page.waitForSelector(historySelector).then(() => {
     return page.$$eval(historySelector, (elements) =>
       elements.map((element) => parseFloat(element.textContent!)),
