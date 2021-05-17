@@ -42,13 +42,17 @@ function GetTTMContainer(data: TTMData[]) {
 }
 
 function GetFundContainer(fund: number[]) {
-  let sum = 0
-  for (const f of fund) {
+  if (fund.length === 0) {
+    return <CenterDiv>数据异常</CenterDiv>
+  }
+  let sum = fund[0]
+  for (let i = 1; i < fund.length; i++) {
+    const f = fund[i]
     if (isNaN(f)) {
       return <CenterDiv>数据异常</CenterDiv>
     }
     if (sum * f < 0) {
-      sum = 0
+      return <CenterDiv>{`当前估值连续变化幅度累计${sum}%`}</CenterDiv>
     }
     sum += f
   }
