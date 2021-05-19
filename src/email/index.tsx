@@ -1,17 +1,15 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { CenterDiv } from '../components/common'
 import Card from '../components/card'
 import Layout from '../components/layout'
 import { TTMData } from '../interfaces/ttm'
 
 type Props = {
   data: TTMData[]
-  fund: number[]
+  funds: { [name: string]: number[] }
 }
 
 const CardContainer = styled(Card.Container)`
-  width: calc(50% - 0.4em);
   min-width: 200px;
   box-sizing: border-box;
   margin: 0.2em;
@@ -27,43 +25,55 @@ function GetTTMContainer(data: TTMData[]) {
     const pre = data[data.length - 2]
     const now = data[data.length - 1]
     return (
-      <WrapContainer style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <>
         <Card title="昨日ttm" ContainerStyle={CardContainer}>
           {pre.averagePETTM}
         </Card>
         <Card title="今日ttm" ContainerStyle={CardContainer}>
           {now.averagePETTM}
         </Card>
-      </WrapContainer>
+      </>
     )
   } else {
-    return <CenterDiv>ttm数据缺失</CenterDiv>
+    return <Card title="ttm数据">ttm数据缺失</Card>
   }
 }
 
-function GetFundContainer(fund: number[]) {
-  if (fund.length === 0) {
-    return <CenterDiv>数据异常</CenterDiv>
-  }
+function GetFundInfo(fund: number[]) {
+  if (fund.length === 0) return '数据异常'
   let sum = fund[0]
   for (let i = 1; i < fund.length; i++) {
     const f = fund[i]
     if (isNaN(f)) {
-      return <CenterDiv>数据异常</CenterDiv>
+      return '数据异常'
     }
     if (sum * f < 0) {
-      return <CenterDiv>{`当前估值连续变化幅度累计${sum}%`}</CenterDiv>
+      return `当前估值连续变化幅度累计${sum}%`
     }
     sum += f
   }
-  return <CenterDiv>{`当前估值连续变化幅度累计${sum}%`}</CenterDiv>
+  return `当前估值连续变化幅度累计${sum}%`
 }
 
-const App: FC<Props> = ({ data, fund }: Props) => {
+function GetFundsContainer(funds: { [name: string]: number[] }) {
+  return (
+    <>
+      {Object.keys(funds).map((fundCode) => (
+        <Card key={fundCode} title={fundCode}>
+          {GetFundInfo(funds[fundCode])}
+        </Card>
+      ))}
+    </>
+  )
+}
+
+const App: FC<Props> = ({ data, funds }: Props) => {
   return (
     <Layout>
-      {GetTTMContainer(data)}
-      {GetFundContainer(fund)}
+      <WrapContainer>
+        {GetTTMContainer(data)}
+        {GetFundsContainer(funds)}
+      </WrapContainer>
     </Layout>
   )
 }

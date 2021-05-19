@@ -23,6 +23,8 @@ const data = [
   },
 ]
 
-const fund = [-1.5]
+const funds = {
+  test: [-1.5],
+}
 
-render(<App data={data} fund={fund} />, document.getElementById('container'))
+render(<App data={data} funds={funds} />, document.getElementById('container'))

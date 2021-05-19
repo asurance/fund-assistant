@@ -8,7 +8,8 @@ import { useDingDingRobot } from './uses/useDingDingRobot'
 import { useEmail } from './uses/useEmail'
 import { hex } from 'js-md5'
 import axios from 'axios'
-import { launch } from 'puppeteer'
+import { Browser, launch } from 'puppeteer'
+import { fundCodes } from '../config'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Empty = (): void => {}
@@ -70,13 +71,18 @@ export function GetTTMLevel(ttm: number): number {
 
 const historySelector = '#jztable > table > tbody > tr > td:nth-child(4)'
 const predictSelector = '#fund_gszf'
+const nameSelector =
+  '#bodydiv > div:nth-child(13) > div.r_cont.right > div.basic-new > div.bs_jz > div.col-left > h4 > a'
 
-export async function FetchData(): Promise<number[]> {
-  const browser = await launch()
+async function FetchSingleData(
+  browser: Browser,
+  fundCode: string,
+): Promise<{ name: string; ratio: number[] }> {
   const page = await browser.newPage()
-  const navigationPromise = page
-    .goto('http://fundf10.eastmoney.com/jjjz_002199.html')
-    .catch(console.log)
+  page.goto(`http://fundf10.eastmoney.com/jjjz_${fundCode}.html`).catch(Empty)
+  const namePromise = page.waitForSelector(nameSelector).then(() => {
+    return page.$eval(nameSelector, (element) => element.textContent!)
+  })
   const historyPromise = page.waitForSelector(historySelector).then(() => {
     return page.$$eval(historySelector, (elements) =>
       elements.map((element) => parseFloat(element.textContent!)),
@@ -87,12 +93,26 @@ export async function FetchData(): Promise<number[]> {
       parseFloat(element.textContent!),
     )
   })
-  const [, history, predict] = await Promise.all([
-    navigationPromise,
+  const [name, history, predict] = await Promise.all([
+    namePromise,
     historyPromise,
     predictPromise,
   ])
-  await page.close()
+  return { name, ratio: [predict, ...history] }
+}
+
+export async function FetchData(): Promise<{ [name: string]: number[] }> {
+  const browser = await launch()
+  const out: { [name: string]: number[] } = {}
+  const promisePool: Promise<void>[] = []
+  for (const fundCode of fundCodes) {
+    promisePool.push(
+      FetchSingleData(browser, fundCode).then(({ name, ratio }) => {
+        out[name] = ratio
+      }),
+    )
+  }
+  await Promise.all(promisePool)
   await browser.close()
-  return [predict, ...history]
+  return out
 }

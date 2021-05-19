@@ -14,11 +14,11 @@ async function Main() {
   const emailPromise = Promise.all([
     ttmPromise,
     fundPromise,
-  ]).then(([ttm, fund]) =>
-    SendEmail('基金日报', createElement(App, { data: ttm, fund })),
+  ]).then(([ttm, funds]) =>
+    SendEmail('基金日报', createElement(App, { data: ttm, funds })),
   )
   const dingDingPromise = Promise.all([ttmPromise, fundPromise]).then(
-    ([ttm, fund]) => {
+    ([ttm, funds]) => {
       const logs: string[] = []
       if (ttm.length >= 2) {
         const pre = ttm[ttm.length - 2]
@@ -29,19 +29,20 @@ async function Main() {
           logs.push(`* ttm level 变动:${nowLevel - preLevel}`)
         }
       }
-      {
+      for (const fundName in funds) {
+        const fund = funds[fundName]
         let sum = 0
         for (const f of fund) {
           if (isNaN(f)) {
-            logs.push(`* 数据异常,当前累计:${sum}`)
+            logs.push(`* ${fundName} 数据异常,当前累计:${sum}`)
             break
           }
           sum += f
           if (sum <= -4) {
-            logs.push('* 估值下降累计已超过4%')
+            logs.push('* ${fundName} 估值下降累计已超过4%')
             break
           } else if (sum > 4) {
-            logs.push('* 估值上升累计已超过4%')
+            logs.push('* ${fundName} 估值上升累计已超过4%')
             break
           }
         }
