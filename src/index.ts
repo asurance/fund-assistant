@@ -37,12 +37,15 @@ async function Main() {
             logs.push(`* ${fundName} 数据异常,当前累计:${sum}`)
             break
           }
+          if (sum * f < 0) {
+            break
+          }
           sum += f
           if (sum <= -4) {
-            logs.push('* ${fundName} 估值下降累计已超过4%')
+            logs.push(`* ${fundName} 估值下降累计已超过4%`)
             break
-          } else if (sum > 4) {
-            logs.push('* ${fundName} 估值上升累计已超过4%')
+          } else if (sum >= 4) {
+            logs.push(`* ${fundName} 估值上升累计已超过4%`)
             break
           }
         }
