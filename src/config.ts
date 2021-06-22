@@ -26,10 +26,45 @@ export const IndustryCodeMap = new Map<string, string>([
 
 export const FundInfoMap = new Map<string, FundInfo>([
   [
-    '股票1',
+    '农银新能源主题',
     {
-      code: '003096',
-      industry: ['行业一'],
+      code: '002190',
+      industry: ['制造业'],
+    },
+  ],
+  [
+    '信诚新兴产业混合',
+    {
+      code: '000209',
+      industry: ['制造业'],
+    },
+  ],
+  [
+    '鹏华医药科技',
+    {
+      code: '001230',
+      industry: ['制造业', '科学研究和技术服务业', '卫生和社会工作业'],
+    },
+  ],
+  [
+    '方正富邦保险主题指数',
+    {
+      code: '167301',
+      industry: ['金融业', '制造业'],
+    },
+  ],
+  [
+    '国泰国证有色金属行业指数',
+    {
+      code: '160221',
+      industry: ['制造业', '采矿业'],
+    },
+  ],
+  [
+    '国泰大农业股票',
+    {
+      code: '001579',
+      industry: ['制造业', '农、林、牧、渔业'],
     },
   ],
 ])
