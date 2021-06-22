@@ -1,12 +1,36 @@
 import { createElement } from 'react'
 import App from './email'
+import { FundData } from './interfaces/fund'
+import { GetFundPrice } from './utils/fund'
 import { GetTTMData } from './utils/ttm'
 import { dingdingRobot, SendEmail } from './utils/uses'
-import { FetchData } from './utils/util'
 
 async function Main() {
-  const fundPromise = FetchData()
   const ttmPromise = GetTTMData()
+  const fundPromise = GetFundPrice().then((data) => {
+    const out = new Map<string, FundData>()
+    for (const [name, values] of data) {
+      if (values.length === 0) continue
+      let acc = values[0]
+      for (let i = 1; i < values.length; i++) {
+        const value = values[i]
+        if (acc * value >= 0) {
+          acc += value
+        } else {
+          if (Math.abs(acc) * 0.1 >= Math.abs(value)) {
+            acc += value
+          } else {
+            break
+          }
+        }
+      }
+      out.set(name, {
+        cur: values[0],
+        acc,
+      })
+    }
+    return out
+  })
   const emailPromise = Promise.all([
     ttmPromise,
     fundPromise,
@@ -15,25 +39,11 @@ async function Main() {
   )
   const dingDingPromise = fundPromise.then((funds) => {
     const logs: string[] = []
-    for (const fundName in funds) {
-      const fund = funds[fundName]
-      let sum = 0
-      for (const f of fund) {
-        if (isNaN(f)) {
-          logs.push(`* ${fundName} 数据异常,当前累计:${sum}`)
-          break
-        }
-        if (sum * f < 0) {
-          break
-        }
-        sum += f
-        if (sum <= -4) {
-          logs.push(`* ${fundName} 估值下降累计已超过4%`)
-          break
-        } else if (sum >= 4) {
-          logs.push(`* ${fundName} 估值上升累计已超过4%`)
-          break
-        }
+    for (const [name, { acc }] of funds) {
+      if (acc >= 4) {
+        logs.push(`* ${name} 估值上升累计已达${acc}`)
+      } else if (acc <= -4) {
+        logs.push(`* ${name} 估值下降累计已达${acc}`)
       }
     }
     if (logs.length > 0) {
