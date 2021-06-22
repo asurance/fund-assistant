@@ -17,3 +17,7 @@ export const cell: CSSProperties = {
   borderTop: `1px solid ${borderColor}`,
   borderBottom: `1px solid ${borderColor}`,
 }
+
+export function highLightColor(t: number): string {
+  return `hsl(${120 - t * 120},100%,50%)`
+}

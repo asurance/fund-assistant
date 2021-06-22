@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { cell } from './style'
+import { cell, highLightColor } from './style'
 
 type TTMProps = {
   industry: string
@@ -27,17 +27,31 @@ const TTM: FC<TTMProps> = ({ industry, ttm }: TTMProps) => {
     const today = ttm[ttm.length - 1]
     const last = ttm[ttm.length - 2]
     ttm.sort((a, b) => a - b)
+    const upRatio = (today - last) / last
+    const orderRatio = (ttm.indexOf(today) + 1) / ttm.length
+    const difRatio = (today - ttm[0]) / (ttm[ttm.length - 1] - ttm[0])
     return (
       <tr>
         <td style={cell}>{industry}</td>
         <td style={cell}>{today}</td>
-        <td style={cell}>{`${(((today - last) / last) * 100).toFixed(2)}%`}</td>
-        <td style={cell}>{`${
-          ((ttm.indexOf(today) + 1) / ttm.length) * 100
-        }%`}</td>
-        <td style={cell}>{`${
-          ((today - ttm[0]) / (ttm[ttm.length - 1] - ttm[0])) * 100
-        }%`}</td>
+        <td
+          style={{
+            ...cell,
+            color: highLightColor(Math.max(0, Math.min(1, (upRatio + 1) / 2))),
+          }}
+        >{`${(upRatio * 100).toFixed(2)}%`}</td>
+        <td
+          style={{
+            ...cell,
+            color: highLightColor(orderRatio),
+          }}
+        >{`${(orderRatio * 100).toFixed(2)}%`}</td>
+        <td
+          style={{
+            ...cell,
+            color: highLightColor(difRatio),
+          }}
+        >{`${(difRatio * 100).toFixed(2)}%`}</td>
       </tr>
     )
   }

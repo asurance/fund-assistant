@@ -1,11 +1,5 @@
 import React, { FC, ReactNode } from 'react'
-import {
-  borderColor,
-  backgroundColor,
-  cell,
-  center,
-  fontColor,
-} from '../components/style'
+import { backgroundColor, cell, center, fontColor } from '../components/style'
 import TTM from '../components/ttm'
 
 type Props = {
