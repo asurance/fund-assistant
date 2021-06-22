@@ -2,9 +2,8 @@
 import axios from 'axios'
 import { SentMessageInfo } from 'nodemailer'
 import { Browser } from 'puppeteer'
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { ServerStyleSheet } from 'styled-components'
 import { Empty } from '../util'
 import { useDingDingRobot } from './useDingDingRobot'
 import { useEmail } from './useEmail'
@@ -26,15 +25,14 @@ const email = useEmail({
 
 export function SendEmail(
   subject: string,
-  root: ReactNode,
+  root: ReactElement,
 ): Promise<SentMessageInfo> {
-  const sheet = new ServerStyleSheet()
-  const divContent = renderToStaticMarkup(sheet.collectStyles(root))
+  const divContent = renderToStaticMarkup(root)
   return email.sendEmail({
     from: process.env.FROM_EMAIL,
     to: process.env.TO_EMAIL,
     subject,
-    html: `${sheet.getStyleTags()}${divContent}`,
+    html: divContent,
   })
 }
 
