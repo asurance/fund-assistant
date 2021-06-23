@@ -41,9 +41,9 @@ async function Main() {
     const logs: string[] = []
     for (const [name, { acc }] of funds) {
       if (acc >= 4) {
-        logs.push(`* ${name} 估值上升累计已达${acc}`)
+        logs.push(`* ${name} 估值上升累计已达${acc.toFixed(2)}%`)
       } else if (acc <= -4) {
-        logs.push(`* ${name} 估值下降累计已达${acc}`)
+        logs.push(`* ${name} 估值下降累计已达${acc.toFixed(2)}%`)
       }
     }
     if (logs.length > 0) {

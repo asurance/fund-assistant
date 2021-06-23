@@ -15,8 +15,8 @@ const Fund: FC<FundProps> = ({ name, cur, acc }: FundProps) => {
   return (
     <tr>
       <td style={cell}>{name}</td>
-      <td style={{ ...cell, color: GetColor(cur) }}>{`${cur}%`}</td>
-      <td style={{ ...cell, color: GetColor(acc) }}>{`${acc}`}</td>
+      <td style={{ ...cell, color: GetColor(cur) }}>{`${cur.toFixed(2)}%`}</td>
+      <td style={{ ...cell, color: GetColor(acc) }}>{`${acc.toFixed(2)}%`}</td>
     </tr>
   )
 }
