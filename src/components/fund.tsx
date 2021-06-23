@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { cell, highLightColor } from './style'
+import { cell, GetChangePercentColor } from './style'
 
 type FundProps = {
   name: string
@@ -7,16 +7,16 @@ type FundProps = {
   acc: number
 }
 
-function GetColor(val: number) {
-  return highLightColor(Math.max(0, Math.min(1, (val + 4) / 8)))
-}
-
 const Fund: FC<FundProps> = ({ name, cur, acc }: FundProps) => {
   return (
     <tr>
       <td style={cell}>{name}</td>
-      <td style={{ ...cell, color: GetColor(cur) }}>{`${cur.toFixed(2)}%`}</td>
-      <td style={{ ...cell, color: GetColor(acc) }}>{`${acc.toFixed(2)}%`}</td>
+      <td
+        style={{ ...cell, color: GetChangePercentColor(cur) }}
+      >{`${cur.toFixed(2)}%`}</td>
+      <td
+        style={{ ...cell, color: GetChangePercentColor(acc) }}
+      >{`${acc.toFixed(2)}%`}</td>
     </tr>
   )
 }
