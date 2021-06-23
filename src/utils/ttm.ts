@@ -1,5 +1,5 @@
 import { hex } from 'js-md5'
-import { IndustryCodeMap } from '../config'
+import { FundInfoMap, IndustryCodeMap } from '../config'
 import { ATTMData, IndustryTTMData } from '../interfaces/ttm'
 import { Request } from './uses'
 
@@ -40,14 +40,22 @@ export async function GetTTMData(): Promise<Map<string, number[]>> {
       })
       .catch(console.error),
   )
+  const industrySet = new Set<string>()
+  for (const { industry } of FundInfoMap.values()) {
+    for (const i of industry) {
+      industrySet.add(i)
+    }
+  }
   for (const [industry, code] of IndustryCodeMap) {
-    promiseList.push(
-      GetIndustryTTMData(code)
-        .then((ttm) => {
-          out.set(industry, ttm)
-        })
-        .catch(console.log),
-    )
+    if (industrySet.has(industry)) {
+      promiseList.push(
+        GetIndustryTTMData(code)
+          .then((ttm) => {
+            out.set(industry, ttm)
+          })
+          .catch(console.log),
+      )
+    }
   }
   await Promise.all(promiseList)
   return out
