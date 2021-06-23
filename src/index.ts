@@ -1,4 +1,5 @@
 import { createElement } from 'react'
+import { FundInfoMap } from './config'
 import App from './email'
 import { FundData } from './interfaces/fund'
 import { GetFundPrice } from './utils/fund'
@@ -40,10 +41,11 @@ async function Main() {
   const dingDingPromise = fundPromise.then((funds) => {
     const logs: string[] = []
     for (const [name, { acc }] of funds) {
+      const code = FundInfoMap.get(name)?.code ?? 'unknown'
       if (acc >= 4) {
-        logs.push(`* ${name} 估值上升累计已达${acc.toFixed(2)}%`)
+        logs.push(`* ${name}(${code}) 估值上升累计已达${acc.toFixed(2)}%`)
       } else if (acc <= -4) {
-        logs.push(`* ${name} 估值下降累计已达${acc.toFixed(2)}%`)
+        logs.push(`* ${name}(${code}) 估值下降累计已达${acc.toFixed(2)}%`)
       }
     }
     if (logs.length > 0) {
