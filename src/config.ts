@@ -30,13 +30,7 @@ export const FundInfoMap = new Map<string, FundInfo>([
     {
       code: '002190',
       industry: ['制造业'],
-    },
-  ],
-  [
-    '信诚新兴产业混合',
-    {
-      code: '000209',
-      industry: ['制造业'],
+      subject: ['锂电池', '特斯拉', '电源设备'],
     },
   ],
   [
@@ -44,6 +38,7 @@ export const FundInfoMap = new Map<string, FundInfo>([
     {
       code: '001230',
       industry: ['制造业', '科学研究和技术服务业', '卫生和社会工作业'],
+      subject: ['医疗服务', '创新药'],
     },
   ],
   [
@@ -51,6 +46,7 @@ export const FundInfoMap = new Map<string, FundInfo>([
     {
       code: '167301',
       industry: ['金融业', '制造业'],
+      subject: ['保险', '养老'],
     },
   ],
   [
@@ -58,6 +54,7 @@ export const FundInfoMap = new Map<string, FundInfo>([
     {
       code: '160221',
       industry: ['制造业', '采矿业'],
+      subject: ['稀有金属', '工业金属', '黄金'],
     },
   ],
   [
@@ -65,6 +62,59 @@ export const FundInfoMap = new Map<string, FundInfo>([
     {
       code: '001579',
       industry: ['制造业', '农、林、牧、渔业'],
+      subject: ['食品饮料', '猪肉产业'],
+    },
+  ],
+  [
+    '诺安成长',
+    {
+      code: '320007',
+      industry: ['制造业'],
+      subject: ['半导体'],
+    },
+  ],
+  [
+    '中银智能制造股票A',
+    {
+      code: '001476',
+      industry: ['制造业', '信息传输、软件和信息技术服务业'],
+      subject: ['电源设备', '光伏'],
+    },
+  ],
+  [
+    '招商中证煤炭等权指数',
+    {
+      code: '161724',
+      industry: ['采矿业', '制造业'],
+      subject: ['煤炭开采'],
+    },
+  ],
+  [
+    '鹏华中证国防指数(LOF)A',
+    {
+      code: '160630',
+      industry: ['制造业'],
+      subject: ['航空装备', '军工'],
+    },
+  ],
+  [
+    '景顺长城策略精选灵活配置混合',
+    {
+      code: '000242',
+      industry: ['制造业', '信息传输、软件和信息技术服务业'],
+      subject: ['化学制品'],
+    },
+  ],
+  [
+    '长信电子信息行业量化灵活配置混合',
+    {
+      code: '519929',
+      industry: [
+        '制造业',
+        '信息传输、软件和信息技术服务业',
+        '租赁和商务服务业',
+      ],
+      subject: ['5G'],
     },
   ],
 ])
