@@ -4,8 +4,8 @@ import App from '../email'
 import { FundData } from '../interfaces/fund'
 
 const ttm = new Map<string, number[]>([
-  ['采矿业', [1, 2, 3, 4, 5]],
-  ['制造业', [5, 4, 3, 2, 1]],
+  ['制造业', [1, 2, 3, 4, 5]],
+  ['采矿业', [5, 4, 3, 2, 1]],
   ['建筑业', [1]],
   ['金融业', []],
 ])

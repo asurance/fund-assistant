@@ -3,6 +3,7 @@ import { backgroundColor, cell, center, fontColor } from '../components/style'
 import { FundData } from '../interfaces/fund'
 import TTM from '../components/ttm'
 import Fund from '../components/fund'
+import { IndustryCodeMap } from '../config'
 
 type Props = {
   ttm: Map<string, number[]>
@@ -11,8 +12,13 @@ type Props = {
 
 const App: FC<Props> = ({ ttm, funds }: Props) => {
   const ttms: ReactNode[] = []
-  for (const [name, data] of ttm) {
-    ttms.push(<TTM key={name} industry={name} ttm={data} />)
+  if (ttm.has('A股')) {
+    ttms.push(<TTM key="A股" industry="A股" ttm={ttm.get('A股')!} />)
+  }
+  for (const name of IndustryCodeMap.keys()) {
+    if (ttm.has(name)) {
+      ttms.push(<TTM key={name} industry={name} ttm={ttm.get(name)!} />)
+    }
   }
   const fundNode: ReactNode[] = []
   for (const [name, { cur, acc }] of funds) {
