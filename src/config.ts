@@ -42,14 +42,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     },
   ],
   [
-    '方正富邦保险主题指数',
-    {
-      code: '167301',
-      industry: ['金融业', '制造业'],
-      subject: ['保险', '养老'],
-    },
-  ],
-  [
     '国泰国证有色金属行业指数',
     {
       code: '160221',
