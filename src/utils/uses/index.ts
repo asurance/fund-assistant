@@ -40,8 +40,10 @@ const httpQueue = usePromiseQueue(5)
 
 export function Request<T>(url: string): Promise<T> {
   return httpQueue.push(() => {
-    return new Promise<T>((resolve) => {
-      axios(url).then((data) => resolve(data.data))
+    return new Promise<T>((resolve, reject) => {
+      axios(url)
+        .then((data) => resolve(data.data))
+        .catch(reject)
     })
   })
 }
@@ -53,7 +55,7 @@ const historySelector = '#jztable > table > tbody > tr > td:nth-child(4)'
 
 export function Search(browser: Browser, fundCode: string): Promise<number[]> {
   return pageQueue.push(() => {
-    return new Promise<number[]>((resolve) => {
+    return new Promise<number[]>((resolve, reject) => {
       usePage(browser, async (page) => {
         page
           .goto(`http://fundf10.eastmoney.com/jjjz_${fundCode}.html`)
@@ -77,7 +79,9 @@ export function Search(browser: Browser, fundCode: string): Promise<number[]> {
           historyPromise,
         ])
         return [predict, ...history].filter((value) => !isNaN(value))
-      }).then(resolve)
+      })
+        .then(resolve)
+        .catch(reject)
     })
   })
 }
