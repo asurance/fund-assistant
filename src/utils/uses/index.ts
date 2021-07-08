@@ -9,6 +9,7 @@ import { useDingDingRobot } from './useDingDingRobot'
 import { useEmail } from './useEmail'
 import { usePromiseQueue } from './usePromiseList'
 import { usePage } from './usePuppeteer'
+import { useRetryPromise } from './useRetryPromise'
 
 export { useBrowser } from './usePuppeteer'
 
@@ -56,30 +57,34 @@ const historySelector = '#jztable > table > tbody > tr > td:nth-child(4)'
 export function Search(browser: Browser, fundCode: string): Promise<number[]> {
   return pageQueue.push(() => {
     return new Promise<number[]>((resolve, reject) => {
-      usePage(browser, async (page) => {
-        page
-          .goto(`http://fundf10.eastmoney.com/jjjz_${fundCode}.html`)
-          .catch(Empty)
-        const predictPromise = page
-          .waitForSelector(predictSelector)
-          .then(() => {
-            return page.$eval(predictSelector, (element) =>
-              parseFloat(element.textContent!),
-            )
-          })
-        const historyPromise = page
-          .waitForSelector(historySelector)
-          .then(() => {
-            return page.$$eval(historySelector, (elements) =>
-              elements.map((element) => parseFloat(element.textContent!)),
-            )
-          })
-        const [predict, history] = await Promise.all([
-          predictPromise,
-          historyPromise,
-        ])
-        return [predict, ...history].filter((value) => !isNaN(value))
-      })
+      useRetryPromise(
+        () =>
+          usePage(browser, async (page) => {
+            page
+              .goto(`http://fundf10.eastmoney.com/jjjz_${fundCode}.html`)
+              .catch(Empty)
+            const predictPromise = page
+              .waitForSelector(predictSelector)
+              .then(() => {
+                return page.$eval(predictSelector, (element) =>
+                  parseFloat(element.textContent!),
+                )
+              })
+            const historyPromise = page
+              .waitForSelector(historySelector)
+              .then(() => {
+                return page.$$eval(historySelector, (elements) =>
+                  elements.map((element) => parseFloat(element.textContent!)),
+                )
+              })
+            const [predict, history] = await Promise.all([
+              predictPromise,
+              historyPromise,
+            ])
+            return [predict, ...history].filter((value) => !isNaN(value))
+          }),
+        3,
+      )
         .then(resolve)
         .catch(reject)
     })

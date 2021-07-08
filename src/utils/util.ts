@@ -4,3 +4,15 @@ export const Empty = (): void => {}
 export function ClampTo01(value: number): number {
   return Math.max(0, Math.min(1, value))
 }
+
+export function ParseError(error: unknown): string {
+  if (typeof error === 'string') {
+    return error
+  } else if (error instanceof Error) {
+    return error.message
+  } else if (error instanceof Object && 'message' in error) {
+    return error['message']
+  } else {
+    return 'unknown error'
+  }
+}

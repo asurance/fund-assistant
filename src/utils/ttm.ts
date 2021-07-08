@@ -53,7 +53,7 @@ export async function GetTTMData(): Promise<Map<string, number[]>> {
           .then((ttm) => {
             out.set(industry, ttm)
           })
-          .catch(console.log),
+          .catch(console.error),
       )
     }
   }
