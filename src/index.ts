@@ -7,31 +7,33 @@ import { GetTTMData } from './utils/ttm'
 import { dingdingRobot, SendEmail } from './utils/uses'
 
 async function Main() {
-  const ttmPromise = GetTTMData()
-  const fundPromise = GetFundPrice().then((data) => {
-    const out = new Map<string, FundData>()
-    for (const [name, values] of data) {
-      if (values.length === 0) continue
-      let acc = values[0]
-      for (let i = 1; i < values.length; i++) {
-        const value = values[i]
-        if (acc * value >= 0) {
-          acc += value
-        } else {
-          if (Math.abs(acc) * 0.1 >= Math.abs(value)) {
+  const ttmPromise = GetTTMData().catch(() => new Map<string, number[]>())
+  const fundPromise = GetFundPrice()
+    .then((data) => {
+      const out = new Map<string, FundData>()
+      for (const [name, values] of data) {
+        if (values.length === 0) continue
+        let acc = values[0]
+        for (let i = 1; i < values.length; i++) {
+          const value = values[i]
+          if (acc * value >= 0) {
             acc += value
           } else {
-            break
+            if (Math.abs(acc) * 0.1 >= Math.abs(value)) {
+              acc += value
+            } else {
+              break
+            }
           }
         }
+        out.set(name, {
+          cur: values[0],
+          acc,
+        })
       }
-      out.set(name, {
-        cur: values[0],
-        acc,
-      })
-    }
-    return out
-  })
+      return out
+    })
+    .catch(() => new Map<string, FundData>())
   const emailPromise = Promise.all([
     ttmPromise,
     fundPromise,
