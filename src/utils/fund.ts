@@ -11,7 +11,10 @@ export async function GetFundPrice(): Promise<Map<string, number[]>> {
           .then((price) => {
             out.set(name, price)
           })
-          .catch(console.error),
+          .catch((err) => {
+            out.set(name, [])
+            console.error(err)
+          }),
       )
     }
     await Promise.all(promiseList)

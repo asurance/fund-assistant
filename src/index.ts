@@ -10,9 +10,12 @@ async function Main() {
   const ttmPromise = GetTTMData().catch(() => new Map<string, number[]>())
   const fundPromise = GetFundPrice()
     .then((data) => {
-      const out = new Map<string, FundData>()
+      const out = new Map<string, FundData | null>()
       for (const [name, values] of data) {
-        if (values.length === 0) continue
+        if (values.length === 0) {
+          out.set(name, null)
+          continue
+        }
         let acc = values[0]
         for (let i = 1; i < values.length; i++) {
           const value = values[i]
@@ -42,12 +45,17 @@ async function Main() {
   )
   const dingDingPromise = fundPromise.then((funds) => {
     const logs: string[] = []
-    for (const [name, { acc }] of funds) {
+    for (const [name, data] of funds) {
       const code = FundInfoMap.get(name)?.code ?? 'unknown'
-      if (acc >= 4) {
-        logs.push(`* ${name}(${code}) 估值上升累计已达${acc.toFixed(2)}%`)
-      } else if (acc <= -4) {
-        logs.push(`* ${name}(${code}) 估值下降累计已达${acc.toFixed(2)}%`)
+      if (data === null) {
+        logs.push(`* ${name}(${code}) 获取数据失败`)
+      } else {
+        const { acc } = data
+        if (acc >= 4) {
+          logs.push(`* ${name}(${code}) 估值上升累计已达${acc.toFixed(2)}%`)
+        } else if (acc <= -4) {
+          logs.push(`* ${name}(${code}) 估值下降累计已达${acc.toFixed(2)}%`)
+        }
       }
     }
     if (logs.length > 0) {

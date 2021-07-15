@@ -7,7 +7,7 @@ import { IndustryCodeMap } from '../config'
 
 type Props = {
   ttm: Map<string, number[]>
-  funds: Map<string, FundData>
+  funds: Map<string, FundData | null>
 }
 
 const App: FC<Props> = ({ ttm, funds }: Props) => {
@@ -21,8 +21,8 @@ const App: FC<Props> = ({ ttm, funds }: Props) => {
     }
   }
   const fundNode: ReactNode[] = []
-  for (const [name, { cur, acc }] of funds) {
-    fundNode.push(<Fund key={name} name={name} cur={cur} acc={acc} />)
+  for (const [name, data] of funds) {
+    fundNode.push(<Fund key={name} name={name} data={data} />)
   }
   return (
     <div
