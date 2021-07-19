@@ -16,3 +16,7 @@ export function ParseError(error: unknown): string {
     return 'unknown error'
   }
 }
+
+export function Wait(time: number): Promise<void> {
+  return new Promise<void>((resolve) => setTimeout(resolve, time))
+}

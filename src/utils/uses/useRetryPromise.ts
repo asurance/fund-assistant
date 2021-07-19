@@ -1,4 +1,4 @@
-import { ParseError } from '../util'
+import { ParseError, Wait } from '../util'
 
 export async function useRetryPromise<T>(
   fn: () => Promise<T>,
@@ -12,6 +12,7 @@ export async function useRetryPromise<T>(
     } catch (e) {
       retryCount--
       errorMessages.push(ParseError(e))
+      await Wait(30000)
     }
   }
   throw new Error(errorMessages.join('\n'))
