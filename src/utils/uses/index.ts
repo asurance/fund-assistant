@@ -84,5 +84,6 @@ export function Search(browser: Browser, fundCode: string): Promise<number[]> {
         }),
       ),
     3,
+    30000,
   )
 }
