@@ -3,11 +3,9 @@ import { FundInfoMap } from './config'
 import App from './email'
 import { FundData } from './interfaces/fund'
 import { GetFundPrice } from './utils/fund'
-import { GetTTMData } from './utils/ttm'
 import { dingdingRobot, SendEmail } from './utils/uses'
 
 async function Main() {
-  const ttmPromise = GetTTMData().catch(() => new Map<string, number[]>())
   const fundPromise = GetFundPrice()
     .then((data) => {
       const out = new Map<string, FundData | null>()
@@ -37,11 +35,8 @@ async function Main() {
       return out
     })
     .catch(() => new Map<string, FundData>())
-  const emailPromise = Promise.all([
-    ttmPromise,
-    fundPromise,
-  ]).then(([ttm, funds]) =>
-    SendEmail('基金日报', createElement(App, { ttm, funds })),
+  const emailPromise = fundPromise.then((funds) =>
+    SendEmail('基金日报', createElement(App, { funds })),
   )
   const dingDingPromise = fundPromise.then((funds) => {
     const logs: string[] = []

@@ -1,35 +1,10 @@
 import { FundInfo } from './interfaces/fund'
 
-export const fundCodes = ['003096', '161005']
-
-export const IndustryCodeMap = new Map<string, string>([
-  ['农、林、牧、渔业', 'A'],
-  ['采矿业', 'B'],
-  ['制造业', 'C'],
-  ['电力、热力、燃气及水的生产和供应业', 'D'],
-  ['建筑业', 'E'],
-  ['批发和零售业', 'F'],
-  ['交通运输、仓储和邮政业', 'G'],
-  ['住宿和餐饮业', 'H'],
-  ['信息传输、软件和信息技术服务业', 'I'],
-  ['金融业', 'J'],
-  ['房地产业', 'K'],
-  ['租赁和商务服务业', 'L'],
-  ['科学研究和技术服务业', 'M'],
-  ['水利、环境和公共设施管理业', 'N'],
-  ['居民服务、修理和其他服务业', 'O'],
-  ['教育', 'P'],
-  ['卫生和社会工作业', 'Q'],
-  ['文化、体育和娱乐业', 'R'],
-  ['综合', 'S'],
-])
-
 export const FundInfoMap = new Map<string, FundInfo>([
   [
     '农银新能源主题',
     {
       code: '002190',
-      industry: ['制造业'],
       subject: ['锂电池', '特斯拉', '电源设备'],
     },
   ],
@@ -37,7 +12,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '鹏华医药科技',
     {
       code: '001230',
-      industry: ['制造业', '科学研究和技术服务业', '卫生和社会工作业'],
       subject: ['医疗服务', '创新药'],
     },
   ],
@@ -45,7 +19,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '国泰国证有色金属行业指数',
     {
       code: '160221',
-      industry: ['制造业', '采矿业'],
       subject: ['稀有金属', '工业金属', '黄金'],
     },
   ],
@@ -53,7 +26,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '国泰大农业股票',
     {
       code: '001579',
-      industry: ['制造业', '农、林、牧、渔业'],
       subject: ['食品饮料', '猪肉产业'],
     },
   ],
@@ -61,7 +33,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '诺安成长',
     {
       code: '320007',
-      industry: ['制造业'],
       subject: ['半导体'],
     },
   ],
@@ -69,7 +40,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '中银智能制造股票A',
     {
       code: '001476',
-      industry: ['制造业', '信息传输、软件和信息技术服务业'],
       subject: ['电源设备', '光伏'],
     },
   ],
@@ -77,7 +47,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '招商中证煤炭等权指数',
     {
       code: '161724',
-      industry: ['采矿业', '制造业'],
       subject: ['煤炭开采'],
     },
   ],
@@ -85,7 +54,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '鹏华中证国防指数(LOF)A',
     {
       code: '160630',
-      industry: ['制造业'],
       subject: ['航空装备', '军工'],
     },
   ],
@@ -93,7 +61,6 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '景顺长城策略精选灵活配置混合',
     {
       code: '000242',
-      industry: ['制造业', '信息传输、软件和信息技术服务业'],
       subject: ['化学制品'],
     },
   ],
@@ -101,12 +68,14 @@ export const FundInfoMap = new Map<string, FundInfo>([
     '长信电子信息行业量化灵活配置混合',
     {
       code: '519929',
-      industry: [
-        '制造业',
-        '信息传输、软件和信息技术服务业',
-        '租赁和商务服务业',
-      ],
       subject: ['5G'],
+    },
+  ],
+  [
+    '融通中证人工智能主题',
+    {
+      code: '161631',
+      subject: ['计算机应用', '云计算'],
     },
   ],
 ])
