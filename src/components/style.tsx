@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react'
-import { ClampTo01 } from '../utils/util'
+import { Clamp } from '../utils/util'
 
 export const borderColor = '#7e7e7e'
 
@@ -20,14 +20,14 @@ export const cell: CSSProperties = {
 }
 
 export function highLightColor(t: number): string {
-  t = ClampTo01(t)
-  if (t > 0.5) {
-    return `hsl(0,100%,${(t - 0.5) * 2 * 50}%)`
+  t = Clamp(t, 0, 100)
+  if (t > 50) {
+    return `hsl(0,100%,${t - 50}%)`
   } else {
-    return `hsl(120,100%,${(0.5 - t) * 2 * 50}%)`
+    return `hsl(120,100%,${50 - t}%)`
   }
 }
 
 export function GetChangePercentColor(percent: number): string {
-  return highLightColor((percent + 4) / 8)
+  return highLightColor(((percent + 4) / 8) * 100)
 }

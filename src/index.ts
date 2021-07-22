@@ -2,10 +2,39 @@ import { createElement } from 'react'
 import { FundInfoMap } from './config'
 import App from './email'
 import { FundData } from './interfaces/fund'
+import { ParsedTTMData } from './interfaces/ttm'
 import { GetFundPrice } from './utils/fund'
+import { GetATTMData } from './utils/ttm'
 import { dingdingRobot, SendEmail } from './utils/uses'
 
 async function Main() {
+  const attmPromise = GetATTMData()
+    .then((ttm) => {
+      if (ttm.length > 1) {
+        const today = ttm[ttm.length - 1]
+        const last = ttm[ttm.length - 2]
+        ttm.sort((a, b) => a - b)
+        const upRatio = ((today - last) / last) * 100
+        const orderRatio = ((ttm.indexOf(today) + 1) / ttm.length) * 100
+        const difRatio = (today - ttm[0]) / (ttm[ttm.length - 1] - ttm[0])
+        return {
+          now: today,
+          extra: {
+            upRatio,
+            orderRatio,
+            difRatio,
+          },
+        } as ParsedTTMData
+      } else if (ttm.length === 1) {
+        return {
+          now: ttm[0],
+          extra: null,
+        } as ParsedTTMData
+      } else {
+        return null
+      }
+    })
+    .catch(() => null)
   const fundPromise = GetFundPrice()
     .then((data) => {
       const out = new Map<string, FundData | null>()
@@ -35,28 +64,31 @@ async function Main() {
       return out
     })
     .catch(() => new Map<string, FundData>())
-  const emailPromise = fundPromise.then((funds) =>
-    SendEmail('基金日报', createElement(App, { funds })),
+  const emailPromise = Promise.all([attmPromise, fundPromise]).then(
+    ([attm, funds]) =>
+      SendEmail('基金日报', createElement(App, { attm, funds })),
   )
-  const dingDingPromise = fundPromise.then((funds) => {
-    const logs: string[] = []
-    for (const [name, data] of funds) {
-      const code = FundInfoMap.get(name)?.code ?? 'unknown'
-      if (data === null) {
-        logs.push(`* ${name}(${code}) 获取数据失败`)
-      } else {
-        const { acc } = data
-        if (acc >= 4) {
-          logs.push(`* ${name}(${code}) 估值上升累计已达${acc.toFixed(2)}%`)
-        } else if (acc <= -4) {
-          logs.push(`* ${name}(${code}) 估值下降累计已达${acc.toFixed(2)}%`)
+  const dingDingPromise = Promise.all([attmPromise, fundPromise]).then(
+    ([attm, funds]) => {
+      const logs: string[] = []
+      for (const [name, data] of funds) {
+        const code = FundInfoMap.get(name)?.code ?? 'unknown'
+        if (data === null) {
+          logs.push(`* ${name}(${code}) 获取数据失败`)
+        } else {
+          const { acc } = data
+          if (acc >= 4) {
+            logs.push(`* ${name}(${code}) 估值上升累计已达${acc.toFixed(2)}%`)
+          } else if (acc <= -4) {
+            logs.push(`* ${name}(${code}) 估值下降累计已达${acc.toFixed(2)}%`)
+          }
         }
       }
-    }
-    if (logs.length > 0) {
-      return dingdingRobot.sendMarkdown('小助手', logs.join('\n'))
-    }
-  })
+      if (logs.length > 0) {
+        return dingdingRobot.sendMarkdown('小助手', logs.join('\n'))
+      }
+    },
+  )
   await Promise.all([emailPromise, dingDingPromise])
 }
 

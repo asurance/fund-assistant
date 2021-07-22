@@ -138,6 +138,11 @@
     "@types/tapable" "^1"
     "@types/webpack" "^4"
 
+"@types/js-md5@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@types/js-md5/-/js-md5-0.4.3.tgz#c134cbb71c75018876181f886a12a2f9962a312a"
+  integrity sha512-BIga/WEqTi35ccnGysOuO4RmwVnpajv9oDB/sDQSY2b7/Ac7RyYR30bv7otZwByMvOJV9Vqq6/O1DFAnOzE4Pg==
+
 "@types/json-schema@*", "@types/json-schema@^7.0.7", "@types/json-schema@^7.0.8":
   version "7.0.8"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.8.tgz#edf1bf1dbf4e04413ca8e5b17b3b7d7d54b59818"
@@ -2650,6 +2655,11 @@ jest-worker@^27.0.2:
     "@types/node" "*"
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
+
+js-md5@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/js-md5/-/js-md5-0.7.3.tgz#b4f2fbb0b327455f598d6727e38ec272cd09c3f2"
+  integrity sha512-ZC41vPSTLKGwIRjqDh8DfXoCrdQIyBgspJVPXHBGu4nZlAEvG3nf+jO9avM9RmLiGakg7vz974ms99nEV0tmTQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

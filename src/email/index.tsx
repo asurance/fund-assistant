@@ -2,12 +2,15 @@ import React, { FC, ReactNode } from 'react'
 import { backgroundColor, cell, center, fontColor } from '../components/style'
 import { FundData } from '../interfaces/fund'
 import Fund from '../components/fund'
+import Attm from '../components/attm'
+import { ParsedTTMData } from '../interfaces/ttm'
 
 type Props = {
+  attm: ParsedTTMData | null
   funds: Map<string, FundData | null>
 }
 
-const App: FC<Props> = ({ funds }: Props) => {
+const App: FC<Props> = ({ attm, funds }: Props) => {
   const fundNode: ReactNode[] = []
   for (const [name, data] of funds) {
     fundNode.push(<Fund key={name} name={name} data={data} />)
@@ -33,6 +36,27 @@ const App: FC<Props> = ({ funds }: Props) => {
       >
         基金日报
       </div>
+      <table style={{ borderCollapse: 'collapse', textAlign: 'center' }}>
+        <colgroup>
+          <col />
+          <col />
+          <col />
+          <col />
+          <col />
+        </colgroup>
+        <thead>
+          <tr>
+            <th style={cell}>类别</th>
+            <th style={cell}>ttm</th>
+            <th style={cell}>增长百分比</th>
+            <th style={cell}>超越百分比</th>
+            <th style={cell}>极值百分比</th>
+          </tr>
+        </thead>
+        <tbody>
+          <Attm ttm={attm} />
+        </tbody>
+      </table>
       <table
         style={{
           marginTop: '1rem',
