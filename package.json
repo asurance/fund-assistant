@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "debug": "ts-node src/debug.ts",
+    "list": "ts-node src/list.ts",
     "report": "node dist/index.js || true",
     "build": "tsc",
     "dev": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.json\" webpack serve --progress --open --config webpack/webpack.config.ts"
