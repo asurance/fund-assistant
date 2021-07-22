@@ -16,7 +16,8 @@ async function Main() {
         ttm.sort((a, b) => a - b)
         const upRatio = ((today - last) / last) * 100
         const orderRatio = ((ttm.indexOf(today) + 1) / ttm.length) * 100
-        const difRatio = (today - ttm[0]) / (ttm[ttm.length - 1] - ttm[0])
+        const difRatio =
+          ((today - ttm[0]) / (ttm[ttm.length - 1] - ttm[0])) * 100
         return {
           now: today,
           extra: {
