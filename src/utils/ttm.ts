@@ -19,5 +19,5 @@ export async function GetATTMData(): Promise<number[]> {
   const data = await Request<ATTMData[]>(
     `https://www.legulegu.com/api/stockdata/market-ttm-lyr/get-data?token=${token}&marketId=5`,
   )
-  return data.map((ttm) => ttm.middlePETTM)
+  return data.map((ttm) => ttm.averagePETTM)
 }
