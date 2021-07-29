@@ -62,7 +62,6 @@ async function Main() {
           }
         }
         out.set(name, {
-          cur: values[0],
           acc,
           cumulate,
         })

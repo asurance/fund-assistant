@@ -15,16 +15,11 @@ const Fund: FC<FundProps> = ({ name, data }: FundProps) => {
     <tr>
       <td style={cell}>{`${name}(${code})`}</td>
       {data === null ? (
-        <td colSpan={2}>获取数据失败</td>
+        <td>获取数据失败</td>
       ) : (
-        <>
-          <td
-            style={{ ...cell, color: GetChangePercentColor(data.cur) }}
-          >{`${data.cur.toFixed(2)}%`}</td>
-          <td
-            style={{ ...cell, color: GetChangePercentColor(data.acc) }}
-          >{`${data.acc.toFixed(2)}(${TransformCumulate(data.cumulate)})%`}</td>
-        </>
+        <td
+          style={{ ...cell, color: GetChangePercentColor(data.acc) }}
+        >{`${data.acc.toFixed(2)}(${TransformCumulate(data.cumulate)})%`}</td>
       )}
     </tr>
   )

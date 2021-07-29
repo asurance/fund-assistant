@@ -4,7 +4,7 @@ import App from '../email'
 import { FundData } from '../interfaces/fund'
 
 const funds: [string, FundData | null][] = [
-  ['农银新能源', { cur: -1, acc: 3, cumulate: [1, 3, -1] }],
+  ['农银新能源', { acc: 3, cumulate: [1, 3, -1] }],
 ]
 
 render(

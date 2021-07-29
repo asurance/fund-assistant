@@ -4,7 +4,6 @@ export type FundInfo = {
 }
 
 export type FundData = {
-  cur: number
   acc: number
   cumulate: number[]
 }

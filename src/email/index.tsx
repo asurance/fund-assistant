@@ -68,8 +68,6 @@ const App: FC<Props> = ({ attm, funds }: Props) => {
           <col />
           <col />
           <col />
-          <col />
-          <col />
         </colgroup>
         <thead>
           <tr>
