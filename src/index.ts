@@ -73,21 +73,15 @@ async function Main() {
     ([attm, funds]) => {
       const logs: string[] = []
       if (attm && attm.extra) {
-        const { orderRatio, difRatio } = attm.extra
-        if (orderRatio >= 60 || difRatio >= 60) {
-          logs.push(
-            `* A股 当前超越百分比:${orderRatio.toFixed(
-              2,
-            )} 极值百分比:${difRatio.toFixed(2)}`,
-          )
-        }
-        if (orderRatio <= 30 || difRatio <= 30) {
-          logs.push(
-            `* A股 当前超越百分比:${orderRatio.toFixed(
-              2,
-            )} 极值百分比:${difRatio.toFixed(2)}`,
-          )
-        }
+        const {
+          now,
+          extra: { orderRatio, difRatio },
+        } = attm
+        logs.push(
+          `* A股:${now} 当前超越百分比:${orderRatio.toFixed(
+            2,
+          )} 极值百分比:${difRatio.toFixed(2)}`,
+        )
       }
       for (const [name, data] of funds) {
         const code = FundInfoMap.get(name)?.code ?? 'unknown'
