@@ -6,6 +6,7 @@ import { ParsedTTMData } from './interfaces/ttm'
 import { GetFundPrice } from './utils/fund'
 import { GetATTMData } from './utils/ttm'
 import { dingdingRobot, SendEmail } from './utils/uses'
+import { TransformCumulate } from './utils/util'
 
 async function Main() {
   const attmPromise = GetATTMData()
@@ -45,13 +46,16 @@ async function Main() {
           continue
         }
         let acc = values[0]
+        const cumulate = [values[0]]
         for (let i = 1; i < values.length; i++) {
           const value = values[i]
           if (acc * value >= 0) {
             acc += value
+            cumulate.push(value)
           } else {
             if (Math.abs(acc) * 0.1 >= Math.abs(value)) {
               acc += value
+              cumulate.push(value)
             } else {
               break
             }
@@ -60,11 +64,20 @@ async function Main() {
         out.set(name, {
           cur: values[0],
           acc,
+          cumulate,
         })
       }
-      return out
+      return [...out].sort(([, a], [, b]) => {
+        if (a === null) {
+          return 1
+        } else if (b === null) {
+          return -1
+        } else {
+          return b.acc - a.acc
+        }
+      })
     })
-    .catch(() => new Map<string, FundData>())
+    .catch(() => [] as [string, FundData | null][])
   const emailPromise = Promise.all([attmPromise, fundPromise]).then(
     ([attm, funds]) =>
       SendEmail('基金日报', createElement(App, { attm, funds })),
@@ -88,11 +101,19 @@ async function Main() {
         if (data === null) {
           logs.push(`* ${name}(${code}) 获取数据失败`)
         } else {
-          const { acc } = data
+          const { acc, cumulate } = data
           if (acc >= 4) {
-            logs.push(`* ${name}(${code}) 估值上升累计已达${acc.toFixed(2)}%`)
+            logs.push(
+              `* ${name}(${code}) 估值上升累计已达${acc.toFixed(
+                2,
+              )}(${TransformCumulate(cumulate)})%`,
+            )
           } else if (acc <= -4) {
-            logs.push(`* ${name}(${code}) 估值下降累计已达${acc.toFixed(2)}%`)
+            logs.push(
+              `* ${name}(${code}) 估值下降累计已达${acc.toFixed(
+                2,
+              )}(${TransformCumulate(cumulate)})%`,
+            )
           }
         }
       }

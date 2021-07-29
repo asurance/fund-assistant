@@ -7,7 +7,7 @@ import { ParsedTTMData } from '../interfaces/ttm'
 
 type Props = {
   attm: ParsedTTMData | null
-  funds: Map<string, FundData | null>
+  funds: [string, FundData | null][]
 }
 
 const App: FC<Props> = ({ attm, funds }: Props) => {

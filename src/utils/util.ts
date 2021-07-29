@@ -20,3 +20,18 @@ export function ParseError(error: unknown): string {
 export function Wait(time: number): Promise<void> {
   return new Promise<void>((resolve) => setTimeout(resolve, time))
 }
+
+export function TransformCumulate(cumulate: number[]): string {
+  if (cumulate.length === 0) {
+    return ''
+  } else {
+    let out = `${cumulate[0].toFixed(2)}`
+    for (let i = 1; i < cumulate.length; i++) {
+      out +=
+        cumulate[i] >= 0
+          ? `+${cumulate[i].toFixed(2)}`
+          : `${cumulate[i].toFixed(2)}`
+    }
+    return out
+  }
+}
