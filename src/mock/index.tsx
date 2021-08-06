@@ -11,10 +11,9 @@ render(
   <App
     attm={{
       now: 100,
-      extra: {
-        upRatio: 1,
-        orderRatio: -50,
-        difRatio: 50,
+      orderRatio: {
+        from: 30,
+        to: 30,
       },
     }}
     funds={funds}

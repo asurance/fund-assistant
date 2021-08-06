@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { ParsedTTMData } from '../interfaces/ttm'
-import { cell, GetChangePercentColor, highLightColor } from './style'
+import { cell, highLightColor } from './style'
 
 type Props = {
   ttm: ParsedTTMData | null
@@ -8,8 +8,8 @@ type Props = {
 
 const Attm: FC<Props> = ({ ttm }: Props) => {
   if (ttm) {
-    if (ttm.extra) {
-      const { upRatio, orderRatio, difRatio } = ttm.extra
+    if (ttm.orderRatio) {
+      const { from, to } = ttm.orderRatio
       return (
         <tr>
           <td style={cell}>A股</td>
@@ -17,21 +17,13 @@ const Attm: FC<Props> = ({ ttm }: Props) => {
           <td
             style={{
               ...cell,
-              color: GetChangePercentColor(upRatio),
+              color: highLightColor((from + to) / 2),
             }}
-          >{`${upRatio.toFixed(2)}%`}</td>
-          <td
-            style={{
-              ...cell,
-              color: highLightColor(orderRatio),
-            }}
-          >{`${orderRatio.toFixed(2)}%`}</td>
-          <td
-            style={{
-              ...cell,
-              color: highLightColor(difRatio),
-            }}
-          >{`${difRatio.toFixed(2)}%`}</td>
+          >
+            {from === to
+              ? `${from.toFixed(2)}%`
+              : `${from.toFixed(2)} ~ ${to.toFixed(2)}%`}
+          </td>
         </tr>
       )
     } else {
@@ -39,9 +31,7 @@ const Attm: FC<Props> = ({ ttm }: Props) => {
         <tr>
           <td style={cell}>A股</td>
           <td style={cell}>{ttm.now}</td>
-          <td style={cell} colSpan={3}>
-            缺失数据
-          </td>
+          <td style={cell}>缺失数据</td>
         </tr>
       )
     }
@@ -49,7 +39,7 @@ const Attm: FC<Props> = ({ ttm }: Props) => {
     return (
       <tr>
         <td style={cell}>A股</td>
-        <td style={cell} colSpan={4}>
+        <td style={cell} colSpan={2}>
           缺失数据
         </td>
       </tr>

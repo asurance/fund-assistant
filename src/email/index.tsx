@@ -48,9 +48,7 @@ const App: FC<Props> = ({ attm, funds }: Props) => {
           <tr>
             <th style={cell}>类别</th>
             <th style={cell}>ttm</th>
-            <th style={cell}>增长百分比</th>
-            <th style={cell}>超越百分比</th>
-            <th style={cell}>极值百分比</th>
+            <th style={cell}>百分比</th>
           </tr>
         </thead>
         <tbody>
@@ -72,7 +70,6 @@ const App: FC<Props> = ({ attm, funds }: Props) => {
         <thead>
           <tr>
             <th style={cell}>基金名称</th>
-            <th style={cell}>当前涨幅</th>
             <th style={cell}>累计涨幅</th>
           </tr>
         </thead>

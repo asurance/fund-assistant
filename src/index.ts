@@ -10,28 +10,70 @@ import { TransformCumulate } from './utils/util'
 
 async function Main() {
   const attmPromise = GetATTMData()
-    .then((ttm) => {
+    .then<ParsedTTMData | null>((ttm) => {
       if (ttm.length > 1) {
         const today = ttm[ttm.length - 1]
-        const last = ttm[ttm.length - 2]
+        ttm.pop()
         ttm.sort((a, b) => a - b)
-        const upRatio = ((today - last) / last) * 100
-        const orderRatio = ((ttm.indexOf(today) + 1) / ttm.length) * 100
-        const difRatio =
-          ((today - ttm[0]) / (ttm[ttm.length - 1] - ttm[0])) * 100
-        return {
-          now: today,
-          extra: {
-            upRatio,
-            orderRatio,
-            difRatio,
-          },
-        } as ParsedTTMData
+        let from = -Infinity
+        let to = Infinity
+        if (today < ttm[0]) {
+          from = 0
+          to = 0
+        } else if (today > ttm[ttm.length - 1]) {
+          from = 100
+          to = 100
+        } else {
+          if (ttm.length === 1) {
+            from = 0
+            to = 100
+          } else {
+            let i = 0
+            while (i < ttm.length) {
+              if (today === ttm[i]) {
+                from = (i / (ttm.length - 1)) * 100
+                break
+              } else if (today < ttm[i]) {
+                from = to =
+                  ((i - 1 + (today - ttm[i - 1]) / (ttm[i] - ttm[i - 1])) /
+                    (ttm.length - 1)) *
+                  100
+                break
+              }
+              i++
+            }
+            if (to === Infinity) {
+              to = from
+              i++
+              while (i < ttm.length) {
+                if (today === ttm[i]) {
+                  to = (i / (ttm.length - 1)) * 100
+                } else {
+                  break
+                }
+              }
+            }
+          }
+        }
+        if (from === -Infinity || to === Infinity) {
+          return {
+            now: today,
+            orderRatio: null,
+          }
+        } else {
+          return {
+            now: today,
+            orderRatio: {
+              from,
+              to,
+            },
+          }
+        }
       } else if (ttm.length === 1) {
         return {
           now: ttm[0],
-          extra: null,
-        } as ParsedTTMData
+          orderRatio: null,
+        }
       } else {
         return null
       }
@@ -84,15 +126,18 @@ async function Main() {
   const dingDingPromise = Promise.all([attmPromise, fundPromise]).then(
     ([attm, funds]) => {
       const logs: string[] = []
-      if (attm && attm.extra) {
+      if (attm && attm.orderRatio) {
         const {
           now,
-          extra: { orderRatio, difRatio },
+          orderRatio: { from, to },
         } = attm
+        logs.push(`* A股ttm:${now}`)
         logs.push(
-          `* A股:${now} 当前超越百分比:${orderRatio.toFixed(
-            2,
-          )} 极值百分比:${difRatio.toFixed(2)}`,
+          `当前百分比:${
+            from === to
+              ? from.toFixed(2)
+              : `${from.toFixed(2)} ~ ${to.toFixed(2)}`
+          }%`,
         )
       }
       for (const [name, data] of funds) {

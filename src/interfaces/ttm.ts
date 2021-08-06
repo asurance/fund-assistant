@@ -10,11 +10,8 @@ export type ATTMData = {
 
 export type ParsedTTMData = {
   now: number
-  extra: ExtraTTMData | null
-}
-
-export type ExtraTTMData = {
-  upRatio: number
-  orderRatio: number
-  difRatio: number
+  orderRatio: {
+    from: number
+    to: number
+  } | null
 }
