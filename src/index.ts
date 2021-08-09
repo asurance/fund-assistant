@@ -12,6 +12,7 @@ async function Main() {
   const attmPromise = GetATTMData()
     .then<ParsedTTMData | null>((ttm) => {
       if (ttm.length > 1) {
+        console.log(`获取到${ttm.length}条ttm数据`)
         const today = ttm[ttm.length - 1]
         ttm.pop()
         ttm.sort((a, b) => a - b)
@@ -71,17 +72,29 @@ async function Main() {
           }
         }
       } else if (ttm.length === 1) {
+        console.log(`获取到1条ttm数据`)
         return {
           now: ttm[0],
           orderRatio: null,
         }
       } else {
+        console.log('未获取到ttm数据')
         return null
       }
     })
-    .catch(() => null)
+    .catch(() => {
+      console.log('获取ttm数据失败')
+      return null
+    })
   const fundPromise = GetFundPrice()
     .then((data) => {
+      for (const [name, value] of data) {
+        if (value.length === 0) {
+          console.log(`未获取到${name}数据`)
+        } else {
+          console.log(`获取到${value.length}条${name}数据`)
+        }
+      }
       const out = new Map<string, FundData | null>()
       for (const [name, values] of data) {
         if (values.length === 0) {
@@ -119,7 +132,10 @@ async function Main() {
         }
       })
     })
-    .catch(() => [] as [string, FundData | null][])
+    .catch(() => {
+      console.log('获取基金数据失败')
+      return [] as [string, FundData | null][]
+    })
   const emailPromise = Promise.all([attmPromise, fundPromise]).then(
     ([attm, funds]) =>
       SendEmail('基金日报', createElement(App, { attm, funds })),
