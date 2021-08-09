@@ -51,6 +51,7 @@ async function Main() {
                 } else {
                   break
                 }
+                i++
               }
             }
           }
