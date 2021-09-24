@@ -1,18 +1,20 @@
 import moment from 'moment'
-import { FundInfoMap } from '../config'
+import { FundInfo } from '../interfaces/fund'
 import { Request } from './uses'
 
-export async function GetFundPrice(): Promise<Map<string, number[]>> {
-  const out = new Map<string, number[]>()
+export async function GetFundPrice(
+  config: FundInfo[],
+): Promise<Map<FundInfo, number[]>> {
+  const out = new Map<FundInfo, number[]>()
   const promiseList: Promise<void>[] = []
-  for (const [name, { code }] of FundInfoMap) {
+  for (const info of config) {
     promiseList.push(
-      GetSinglePrice(code)
+      GetSinglePrice(info.code)
         .then((price) => {
-          out.set(name, price)
+          out.set(info, price)
         })
         .catch((err) => {
-          out.set(name, [])
+          out.set(info, [])
           console.error(err)
         }),
     )

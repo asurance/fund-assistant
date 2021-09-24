@@ -1,14 +1,16 @@
 import { createElement } from 'react'
-import { FundInfoMap } from './config'
 import App from './email'
-import { FundData } from './interfaces/fund'
+import { FundData, FundInfo } from './interfaces/fund'
 import { ParsedTTMData } from './interfaces/ttm'
 import { GetFundPrice } from './utils/fund'
+import { GetFundInfo } from './utils/fundinfo'
 import { GetATTMData } from './utils/ttm'
 import { dingdingRobot, SendEmail } from './utils/uses'
 import { TransformCumulate } from './utils/util'
 
 async function Main() {
+  const config = await GetFundInfo()
+  console.log(`获取到当前配置:\n${JSON.stringify(config)}`)
   const attmPromise = GetATTMData()
     .then<ParsedTTMData | null>((ttm) => {
       if (ttm.length > 1) {
@@ -86,19 +88,19 @@ async function Main() {
       console.log('获取ttm数据失败')
       return null
     })
-  const fundPromise = GetFundPrice()
+  const fundPromise = GetFundPrice(config)
     .then((data) => {
-      for (const [name, value] of data) {
+      for (const [info, value] of data) {
         if (value.length === 0) {
-          console.log(`未获取到${name}数据`)
+          console.log(`未获取到${info}数据`)
         } else {
-          console.log(`获取到${value.length}条${name}数据`)
+          console.log(`获取到${value.length}条${info}数据`)
         }
       }
-      const out = new Map<string, FundData | null>()
-      for (const [name, values] of data) {
+      const out = new Map<FundInfo, FundData | null>()
+      for (const [info, values] of data) {
         if (values.length === 0) {
-          out.set(name, null)
+          out.set(info, null)
           continue
         }
         let acc = values[0]
@@ -117,7 +119,7 @@ async function Main() {
             }
           }
         }
-        out.set(name, {
+        out.set(info, {
           acc,
           cumulate,
         })
@@ -134,7 +136,7 @@ async function Main() {
     })
     .catch(() => {
       console.log('获取基金数据失败')
-      return [] as [string, FundData | null][]
+      return [] as [FundInfo, FundData | null][]
     })
   const emailPromise = Promise.all([attmPromise, fundPromise]).then(
     ([attm, funds]) =>
@@ -157,8 +159,8 @@ async function Main() {
           }%`,
         )
       }
-      for (const [name, data] of funds) {
-        const code = FundInfoMap.get(name)?.code ?? 'unknown'
+      for (const [info, data] of funds) {
+        const code = info.code
         if (data === null) {
           logs.push(`* ${name}(${code}) 获取数据失败`)
         } else {
@@ -183,6 +185,7 @@ async function Main() {
       }
     },
   )
+  await dingDingPromise
   await Promise.all([emailPromise, dingDingPromise])
 }
 

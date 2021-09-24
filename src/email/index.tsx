@@ -1,19 +1,19 @@
 import React, { FC, ReactNode } from 'react'
 import { backgroundColor, cell, center, fontColor } from '../components/style'
-import { FundData } from '../interfaces/fund'
+import { FundData, FundInfo } from '../interfaces/fund'
 import Fund from '../components/fund'
 import Attm from '../components/attm'
 import { ParsedTTMData } from '../interfaces/ttm'
 
 type Props = {
   attm: ParsedTTMData | null
-  funds: [string, FundData | null][]
+  funds: [FundInfo, FundData | null][]
 }
 
 const App: FC<Props> = ({ attm, funds }: Props) => {
   const fundNode: ReactNode[] = []
-  for (const [name, data] of funds) {
-    fundNode.push(<Fund key={name} name={name} data={data} />)
+  for (const [info, data] of funds) {
+    fundNode.push(<Fund key={info.code} name={info.name} data={data} />)
   }
   return (
     <div

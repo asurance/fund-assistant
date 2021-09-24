@@ -40,3 +40,4 @@ jobs:
           FROM_EMAIL: ${{secrets.USER_EMAIL}}
           TO_EMAIL: ${{secrets.USER_EMAIL}}
           DING_DING_TOKEN: ${{secrets.DING_DING_TOKEN}}
+          MONGODB_URL: ${{secrets.MONGODB_URL}}

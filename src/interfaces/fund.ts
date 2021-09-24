@@ -1,5 +1,6 @@
 export type FundInfo = {
   code: string
+  name: string
   subject: string[]
 }
 

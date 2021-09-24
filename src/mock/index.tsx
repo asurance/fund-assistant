@@ -1,10 +1,13 @@
 import { render } from 'react-dom'
 import React from 'react'
 import App from '../email'
-import { FundData } from '../interfaces/fund'
+import { FundData, FundInfo } from '../interfaces/fund'
 
-const funds: [string, FundData | null][] = [
-  ['农银新能源', { acc: 3, cumulate: [1, 3, -1] }],
+const funds: [FundInfo, FundData | null][] = [
+  [
+    { name: '农银新能源', code: '001', subject: [''] },
+    { acc: 3, cumulate: [1, 3, -1] },
+  ],
 ]
 
 render(
