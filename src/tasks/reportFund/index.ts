@@ -93,9 +93,9 @@ async function Main() {
     .then((data) => {
       for (const [info, value] of data) {
         if (value.length === 0) {
-          console.log(`未获取到${info}数据`)
+          console.log(`未获取到${info.name}数据`)
         } else {
-          console.log(`获取到${value.length}条${info}数据`)
+          console.log(`获取到${value.length}条${info.name}数据`)
         }
       }
       const out = new Map<FundInfo, FundData | null>()
@@ -163,18 +163,18 @@ async function Main() {
       for (const [info, data] of funds) {
         const code = info.code
         if (data === null) {
-          logs.push(`* ${name}(${code}) 获取数据失败`)
+          logs.push(`* ${info.name}(${code}) 获取数据失败`)
         } else {
           const { acc, cumulate } = data
           if (acc >= 4) {
             logs.push(
-              `* ${name}(${code}) 估值上升累计已达${acc.toFixed(
+              `* ${info.name}(${code}) 估值上升累计已达${acc.toFixed(
                 2,
               )}(${TransformCumulate(cumulate)})%`,
             )
           } else if (acc <= -4) {
             logs.push(
-              `* ${name}(${code}) 估值下降累计已达${acc.toFixed(
+              `* ${info.name}(${code}) 估值下降累计已达${acc.toFixed(
                 2,
               )}(${TransformCumulate(cumulate)})%`,
             )
