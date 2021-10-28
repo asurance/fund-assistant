@@ -49,7 +49,9 @@ async function main() {
     errors.push(e as string)
   }
   if (errors.length > 0) {
-    dingdingRobot.sendText(`获取PB/PE数据时出现错误\n${errors.join('\n')}`)
+    dingdingRobot.sendText(
+      `小助手:\n获取PB/PE数据时出现错误\n${errors.join('\n')}`,
+    )
   }
 }
 
