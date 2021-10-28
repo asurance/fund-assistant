@@ -32,8 +32,8 @@ jobs:
         run: yarn run build
         if: steps.cache-script.outputs.cache-hit != 'true'
 
-      - name: Report
-        run: yarn run report
+      - name: ReportFund
+        run: node dist/tasks/reportFund.js
         env:
           USER_EMAIL: ${{secrets.USER_EMAIL}}
           USER_PASS: ${{secrets.USER_PASS}}

@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "debug": "ts-node src/debug.ts",
-    "report": "node dist/tasks/reportFund.js || true",
     "build": "tsc",
     "dev": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.json\" webpack serve --progress --open --config webpack/webpack.config.ts"
   },
@@ -21,6 +20,7 @@
     "@types/html-webpack-plugin": "^3.2.5",
     "@types/js-md5": "^0.4.3",
     "@types/node": "^14.14.37",
+    "@types/node-fetch": "^2.5.12",
     "@types/nodemailer": "^6.4.1",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
@@ -28,6 +28,7 @@
     "@typescript-eslint/parser": "^4.20.0",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.3",
+    "cheerio": "^1.0.0-rc.10",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "eslint": "^7.23.0",
@@ -39,6 +40,7 @@
     "js-md5": "^0.7.3",
     "moment": "^2.29.1",
     "mongodb": "^4.1.2",
+    "node-fetch": "2.0.0",
     "nodemailer": "^6.5.0",
     "prettier": "^2.2.1",
     "puppeteer": "^8.0.0",

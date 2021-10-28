@@ -1,0 +1,39 @@
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  report_fund:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: CacheModule
+        uses: actions/cache@v2
+        id: cache-module
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install
+        run: yarn
+        if: steps.cache-module.outputs.cache-hit != 'true'
+
+      - name: CacheScript
+        uses: actions/cache@v2
+        id: cache-script
+        with:
+          path: dist
+          key: ${{ runner.os }}-script-${{ github.sha }}
+
+      - name: BuildScript
+        run: yarn run build
+        if: steps.cache-script.outputs.cache-hit != 'true'
+
+      - name: FetchTodayPBPE
+        run: node dist/tasks/fetchTodayPBPE/index.js
+        env:
+          DING_DING_TOKEN: ${{secrets.DING_DING_TOKEN}}
+          MONGODB_URL: ${{secrets.MONGODB_URL}}
