@@ -1,5 +1,5 @@
 import { FundInfo } from '../interfaces/fund'
-import { useDatabase } from './uses'
+import { useDatabase } from './uses/useDataBase'
 
 export async function GetFundInfo(): Promise<FundInfo[]> {
   return useDatabase('fundAssitant', async (db, session) => {

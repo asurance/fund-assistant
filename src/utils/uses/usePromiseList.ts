@@ -1,6 +1,4 @@
-export function usePromiseQueue(
-  count: number,
-): {
+export function usePromiseQueue(count: number): {
   push<T>(promsie: () => Promise<T>): Promise<T>
 } {
   const queue: {

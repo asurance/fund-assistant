@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import moment from 'moment'
 import { load } from 'cheerio'
 import { MongoClient } from 'mongodb'
-import { dingdingRobot } from '../../utils/uses'
+import { dingdingRobot } from '../../utils/uses/useDingDingRobot'
 
 async function main() {
   const errors: string[] = []

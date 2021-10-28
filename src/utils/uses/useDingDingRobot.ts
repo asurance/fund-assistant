@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-export function useDingDingRobot(
-  token: string,
-): {
+export const dingdingRobot = useDingDingRobot(process.env.DING_DING_TOKEN!)
+
+function useDingDingRobot(token: string): {
   sendText: (
     text: string,
     at?: { atMobiles?: string[]; atUserIds?: string[]; isAtAll?: boolean },

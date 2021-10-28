@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { FundInfo } from '../interfaces/fund'
-import { Request } from './uses'
+import { useRequest } from './uses/useRequest'
 
 export async function GetFundPrice(
   config: FundInfo[],
@@ -39,7 +39,7 @@ async function GetSinglePrice(code: string): Promise<number[]> {
 }
 
 async function GetNetWorthTrend(code: string): Promise<number[]> {
-  const jsScript = await Request<string>(
+  const jsScript = await useRequest<string>(
     `http://fund.eastmoney.com/pingzhongdata/${code}.js?v=${timestamp}`,
   )
   const netWorthTrend = eval(`${jsScript};Data_netWorthTrend`) as {
@@ -49,7 +49,7 @@ async function GetNetWorthTrend(code: string): Promise<number[]> {
 }
 
 async function GetPredict(code: string): Promise<number | null> {
-  const jsScript = await Request<string>(
+  const jsScript = await useRequest<string>(
     `http://fundgz.1234567.com.cn/js/${code}.js?rt=${moment.now()}`,
   )
   return await new Promise<number | null>((resolve) => {

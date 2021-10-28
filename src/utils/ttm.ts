@@ -1,6 +1,6 @@
 import { hex } from 'js-md5'
 import { ATTMData } from '../interfaces/ttm'
-import { Request } from './uses'
+import { useRequest } from './uses/useRequest'
 
 function GetToken(): string {
   const date = new Date()
@@ -16,7 +16,7 @@ function GetToken(): string {
 const token = GetToken()
 
 export async function GetATTMData(): Promise<number[]> {
-  const data = await Request<ATTMData[]>(
+  const data = await useRequest<ATTMData[]>(
     `https://www.legulegu.com/api/stockdata/market-ttm-lyr/get-data?token=${token}&marketId=5`,
   )
   return data.map((ttm) => ttm.averagePETTM)

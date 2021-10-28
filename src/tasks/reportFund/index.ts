@@ -1,12 +1,13 @@
 import { createElement } from 'react'
-import App from '../email'
-import { FundData, FundInfo } from '../interfaces/fund'
-import { ParsedTTMData } from '../interfaces/ttm'
-import { GetFundPrice } from '../utils/fund'
-import { GetFundInfo } from '../utils/fundinfo'
-import { GetATTMData } from '../utils/ttm'
-import { dingdingRobot, SendEmail } from '../utils/uses'
-import { TransformCumulate } from '../utils/util'
+import App from '../../email'
+import { FundData, FundInfo } from '../../interfaces/fund'
+import { ParsedTTMData } from '../../interfaces/ttm'
+import { GetFundPrice } from '../../utils/fund'
+import { GetFundInfo } from '../../utils/fundinfo'
+import { GetATTMData } from '../../utils/ttm'
+import { dingdingRobot } from '../../utils/uses/useDingDingRobot'
+import { SendEmail } from '../../utils/uses/useEmail'
+import { TransformCumulate } from '../../utils/util'
 
 async function Main() {
   const config = await GetFundInfo()

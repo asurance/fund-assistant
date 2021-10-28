@@ -25,3 +25,5 @@ rules:
     - off
   '@typescript-eslint/interface-name-prefix':
     - off
+  'react-hooks/rules-of-hooks':
+    - off
