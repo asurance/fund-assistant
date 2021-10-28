@@ -1,16 +1,15 @@
 import React, { FC } from 'react'
-import { FundInfoMap } from '../config'
 import { FundData } from '../interfaces/fund'
 import { TransformCumulate } from '../utils/util'
 import { cell, GetChangePercentColor } from './style'
 
 type FundProps = {
   name: string
+  code: string
   data: FundData | null
 }
 
-const Fund: FC<FundProps> = ({ name, data }: FundProps) => {
-  const code = FundInfoMap.get(name)?.code ?? 'unknown'
+const Fund: FC<FundProps> = ({ name, code, data }: FundProps) => {
   return (
     <tr>
       <td style={cell}>{`${name}(${code})`}</td>

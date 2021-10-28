@@ -13,7 +13,9 @@ type Props = {
 const App: FC<Props> = ({ attm, funds }: Props) => {
   const fundNode: ReactNode[] = []
   for (const [info, data] of funds) {
-    fundNode.push(<Fund key={info.code} name={info.name} data={data} />)
+    fundNode.push(
+      <Fund key={info.code} code={info.code} name={info.name} data={data} />,
+    )
   }
   return (
     <div
