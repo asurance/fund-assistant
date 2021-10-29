@@ -186,7 +186,6 @@ async function Main() {
       }
     },
   )
-  await dingDingPromise
   await Promise.all([emailPromise, dingDingPromise])
 }
 
