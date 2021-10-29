@@ -4,6 +4,7 @@ import { load } from 'cheerio'
 import { MongoClient } from 'mongodb'
 import { ParseError } from '../../utils/util'
 import { dingdingRobot } from '../../utils/uses/useDingDingRobot'
+import '../../patch'
 
 async function main() {
   const logs: string[] = []
