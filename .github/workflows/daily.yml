@@ -40,19 +40,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_script
     steps:
-      # - name: CacheModule
-      #   uses: actions/cache@v2
-      #   id: cache-module
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+      - name: CacheModule
+        uses: actions/cache@v2
+        id: cache-module
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
 
-      # - name: CacheScript
-      #   uses: actions/cache@v2
-      #   id: cache-script
-      #   with:
-      #     path: dist
-      #     key: ${{ runner.os }}-script-${{ github.sha }}
+      - name: CacheScript
+        uses: actions/cache@v2
+        id: cache-script
+        with:
+          path: dist
+          key: ${{ runner.os }}-script-${{ github.sha }}
 
       - name: Fetch
         run: node dist/tasks/fetchTodayPB/index.js
@@ -61,19 +61,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_script
     steps:
-      # - name: CacheModule
-      #   uses: actions/cache@v2
-      #   id: cache-module
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+      - name: CacheModule
+        uses: actions/cache@v2
+        id: cache-module
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
 
-      # - name: CacheScript
-      #   uses: actions/cache@v2
-      #   id: cache-script
-      #   with:
-      #     path: dist
-      #     key: ${{ runner.os }}-script-${{ github.sha }}
+      - name: CacheScript
+        uses: actions/cache@v2
+        id: cache-script
+        with:
+          path: dist
+          key: ${{ runner.os }}-script-${{ github.sha }}
 
       - name: Fetch
         run: node dist/tasks/fetchTodayPE/index.js
